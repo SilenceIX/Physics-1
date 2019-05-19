@@ -37,6 +37,7 @@ private:
 
 QVBoxLayout *sRect();
 QVBoxLayout *sRect1();
+QVBoxLayout *sRect2();
 QVBoxLayout *sRect3();
 
 

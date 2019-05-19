@@ -39,7 +39,8 @@ SOURCES += \
     model2.cpp \
     model3.cpp \
     model4.cpp \
-    model5.cpp
+    model5.cpp \
+    model6.cpp
 
 HEADERS += \
     mainwindow.h \

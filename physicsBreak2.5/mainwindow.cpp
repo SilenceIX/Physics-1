@@ -29,6 +29,18 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(uprend, SIGNAL(timeout()), this, SLOT(Repaint()));
 
 
+    connect(ui->action_3, &QAction::triggered, [=](){exit(0);});
+    connect(ui->action, &QAction::triggered, [=](){hwind->updspr(0); hwind->show();});
+
+    connect(ui->action_5, &QAction::triggered, [=](){curC = 0; on_pushButton_clicked();});
+    connect(ui->action_6, &QAction::triggered, [=](){curC = 1; on_pushButton_clicked();});
+    connect(ui->action_7, &QAction::triggered, [=](){curC = 2; on_pushButton_clicked();});
+    connect(ui->action_8, &QAction::triggered, [=](){curC = 3; on_pushButton_clicked();});
+    connect(ui->action_9, &QAction::triggered, [=](){curC = 4; on_pushButton_clicked();});
+    connect(ui->action_10, &QAction::triggered, [=](){curC = 5; on_pushButton_clicked();});
+
+
+
 
     /*Qt3DCore::QEntity *lightEntity = new Qt3DCore::QEntity(sceneEntity);
     Qt3DRender::QSpotLight *light = new Qt3DRender::QSpotLight(lightEntity);
@@ -224,6 +236,8 @@ void MainWindow::on_room7_clicked()
 
 void MainWindow::on_pushButton_clicked()
 {
+    if (m != nullptr)
+        m->~Model();
     if (curC == -1)
         qDebug()<< "Error!";
     else if (curC != -2)
@@ -252,6 +266,9 @@ void MainWindow::on_pushButton_clicked()
             break;
         case 4:
             m = new Model5();
+            break;
+        case 5:
+            m = new Model6();
             break;
         default:
             m = new Model1();
@@ -300,7 +317,6 @@ void MainWindow::on_pushButton_clicked()
         ui->setup->removeWidget(ui->setup->widget(0));
         ui->status->removeWidget(ui->setup->widget(0));
         this->setWindowTitle("Осцилляторы");
-        m->~Model();
         timer->stop();        
         uprend->start();
     }

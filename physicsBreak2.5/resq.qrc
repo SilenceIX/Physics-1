@@ -76,5 +76,15 @@
         <file>Stands/Math5/wall.obj</file>
         <file>Stands/Math5/wood.jpg</file>
         <file>Stands/Math5/wall.jpg</file>
+        <file>Stands/Math5/prus.jpg</file>
+        <file>Stands/Math6/gruz1o.obj</file>
+        <file>Stands/Math6/gruz2o.obj</file>
+        <file>Stands/Math6/prizma1o.obj</file>
+        <file>Stands/Math6/prizma2o.obj</file>
+        <file>Stands/Math6/stand2o.obj</file>
+        <file>Stands/Math6/sterjeno.obj</file>
+        <file>Stands/Math6/tex1.png</file>
+        <file>Stands/Math6/tex2.png</file>
+        <file>Stands/Math6/stand.obj</file>
     </qresource>
 </RCC>

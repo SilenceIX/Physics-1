@@ -92,7 +92,7 @@ private:
 
     void cameraMoveTo();
 
-    Model *m;
+    Model *m = nullptr;
 
 
 };

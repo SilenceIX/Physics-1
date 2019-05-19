@@ -325,6 +325,98 @@
     </item>
    </layout>
   </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1200</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Файл</string>
+    </property>
+    <addaction name="action_3"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>Графики</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>Справка</string>
+    </property>
+    <addaction name="action"/>
+    <addaction name="separator"/>
+    <addaction name="action_2"/>
+   </widget>
+   <widget class="QMenu" name="menu_4">
+    <property name="title">
+     <string>Комнаты</string>
+    </property>
+    <addaction name="action_5"/>
+    <addaction name="action_6"/>
+    <addaction name="action_7"/>
+    <addaction name="action_8"/>
+    <addaction name="action_9"/>
+    <addaction name="action_10"/>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menu_4"/>
+   <addaction name="menu_2"/>
+   <addaction name="menu_3"/>
+  </widget>
+  <action name="action">
+   <property name="text">
+    <string>О программе</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>Инструкция</string>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="text">
+    <string>Выход</string>
+   </property>
+   <property name="shortcut">
+    <string/>
+   </property>
+  </action>
+  <action name="action_5">
+   <property name="text">
+    <string>Торсионный маятник</string>
+   </property>
+  </action>
+  <action name="action_6">
+   <property name="text">
+    <string>Моделирование прецессии и нутации гироскопа</string>
+   </property>
+  </action>
+  <action name="action_7">
+   <property name="text">
+    <string>Колебания жесткого математического маятника с большими амплитудами</string>
+   </property>
+  </action>
+  <action name="action_8">
+   <property name="text">
+    <string>Измерение скорости пули с помощью баллистического маятника</string>
+   </property>
+  </action>
+  <action name="action_9">
+   <property name="text">
+    <string>Связанные физические маятники</string>
+   </property>
+  </action>
+  <action name="action_10">
+   <property name="text">
+    <string>Оборотный маятник</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>

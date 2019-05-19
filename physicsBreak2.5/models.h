@@ -55,7 +55,7 @@ public:
     QVBoxLayout *GetSet();
     QVBoxLayout *GetInf();
     QString GetName() {return "Торсионный маятник";}
-    ~Model1();
+    ~Model1(){}
 };
 
 class Model2 : public virtual Model, QObject
@@ -184,6 +184,32 @@ public:
     QString GetName() {return "Связанные физические маятники";}
     ~Model5(){}
 };
+
+class Model6 : public virtual Model, QObject
+{
+private:
+
+    void Transform();
+    void LoadModel();
+    Qt3DCore::QEntity *ent;
+    QVBoxLayout *set, *inf;
+    QLabel *i1, *k1;
+    QSlider *s1;
+    Qt3DCore::QTransform *tr1;
+    QList<Plot *> plots;
+public:
+    Model6();
+    void Init();
+    void Compute(double);
+    void Update(double);
+    void CreatePlot(int);
+    Qt3DCore::QEntity *GetEntity(){return ent; }
+    QVBoxLayout *GetSet(){return set; }
+    QVBoxLayout *GetInf() {return inf; }
+    QString GetName() {return "Оборотный маятник";}
+    ~Model6(){}
+};
+
 
 
 

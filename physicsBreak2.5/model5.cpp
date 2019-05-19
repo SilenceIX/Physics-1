@@ -22,7 +22,7 @@ void Model5::LoadModel()
     addObject(ent, ":/Res/tablemetal.obj", ":/Res/tablemetal.png");
 
     Qt3DCore::QEntity *p1 = addObject(ent, ":/Stands/Math5/ospol.obj", ":/Stands/Math5/wood.jpg");
-    Qt3DCore::QEntity *p2 = addObject(ent, ":/Stands/Math5/prus.obj", ":/Stands/Math5/ster.png");
+    Qt3DCore::QEntity *p2 = addObject(ent, ":/Stands/Math5/prus.obj", ":/Stands/Math5/prus.jpg");
     Qt3DCore::QEntity *p3 = addObject(ent, ":/Stands/Math5/pstick.obj", ":/Stands/Math5/pstick.jpg");
     Qt3DCore::QEntity *p4 = addObject(ent, ":/Stands/Math5/st1.obj", ":/Stands/Math5/ster.png");
     Qt3DCore::QEntity *p5 = addObject(ent, ":/Stands/Math5/st2.obj", ":/Stands/Math5/ster.png");

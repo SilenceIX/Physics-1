@@ -220,7 +220,4 @@ double Model1::GetTime()
     return t;
 }
 
-Model1::~Model1()
-{
-}
 
