@@ -40,7 +40,8 @@ SOURCES += \
     model3.cpp \
     model4.cpp \
     model5.cpp \
-    model6.cpp
+    model6.cpp \
+    model7.cpp
 
 HEADERS += \
     mainwindow.h \

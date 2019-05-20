@@ -40,6 +40,8 @@ QVBoxLayout *sRect1();
 QVBoxLayout *sRect2();
 QVBoxLayout *sRect3();
 
+QVBoxLayout *sRect7();
+
 
 
 #endif // HELP_H

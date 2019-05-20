@@ -47,12 +47,15 @@ void Model6::Init()
 
 }
 
-void Model6::Compute(double)
+
+
+
+void Model6::Compute(double dt)
 {
 
 }
 
-void Model6::Update(double)
+void Model6::Update(double dt)
 {
 
 }

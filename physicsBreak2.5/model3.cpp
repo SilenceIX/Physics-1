@@ -72,10 +72,10 @@ Model3::Model3()
         this->sr = double(s3->value()) / 1000.;
         k3->setText(QString("Радиус шара: %1 м").arg(sr));
     });
-    s4 = new QSlider(Qt::Horizontal); s4->setMinimum(int(-2 * PI * 5000.)); s4->setMaximum(int(2 * PI * 5000.)); s4->setValue(int(sA * 5000.));
+    s4 = new QSlider(Qt::Horizontal); s4->setMinimum(int(-2 * PI * 10000.)); s4->setMaximum(int(2 * PI * 10000.)); s4->setValue(int(sA * 10000.));
     connect(s4, &QSlider::valueChanged, [=]()
     {
-        this->sA = double(s4->value()) / 5000.;
+        this->sA = double(s4->value()) / 10000.;
         k4->setText(QString("Начальный угол отклонения: %1 рад").arg(sA));
         A = sA;
         Transform();
@@ -142,17 +142,31 @@ void Model3::Init()
     S = PI * sr * sr;
 }
 
+double Model3::func(double axis, double speed)
+{
+    double r = -g * sin(axis) / L - (speed > 0 ? 1 : -1) * Cx * pl * speed * speed * S / (2 * M);
+    return fabs(r) > 5e-2 ? r : 0.;
+}
+
 void Model3::Compute(double dt)
 {
-    E = -g * sin(A) / L;
-    if (fabs(E) < 5e-2)
-        E = 0.0;
-    if (W > 5e-3)
-        E -= Cx * pl * W * W * S / (2 * M);
-    else if (W < -5e-3)
-        E += Cx * pl * W * W * S / (2 * M);
-    W += E * dt;
-    A += W * dt;
+    double K[4], Q[4];
+    E = func(A, W);
+    K[0] = dt * E;
+    Q[0] = dt * W;
+
+    K[1] = dt * func(A + Q[0] / 2, W + K[0] / 2);
+    Q[1] = dt * (W + K[0] / 2);
+
+    K[2] = dt * func(A + Q[1] / 2, W + K[1] / 2) ;
+    Q[2] = dt * (W + K[1] / 2);
+
+    K[3] = dt * func(A + Q[2] , W + K[2]);
+    Q[3] = dt * (W + K[2]);
+
+    double r =  (K[0] + 2 * K[1] + 2 * K[2] + K[3]) / 6;
+    W += r;
+    A += (Q[0] + 2 * Q[1] + 2 * Q[2] + Q[3]) / 6;
     Ek = M * W * W * L * L / 2;
     Ep = M * g * L * (1 - cos(A));
 }

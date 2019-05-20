@@ -86,5 +86,24 @@
         <file>Stands/Math6/tex1.png</file>
         <file>Stands/Math6/tex2.png</file>
         <file>Stands/Math6/stand.obj</file>
+        <file>Stands/Math7/base2.obj</file>
+        <file>Stands/Math7/cube.obj</file>
+        <file>Stands/Math7/down_rope.obj</file>
+        <file>Stands/Math7/metal.jpg</file>
+        <file>Stands/Math7/planka.obj</file>
+        <file>Stands/Math7/sphere.obj</file>
+        <file>Stands/Math7/up_rope.obj</file>
+        <file>Sup/Math7/1.jpg</file>
+        <file>Sup/Math7/2.jpg</file>
+        <file>Sup/Math7/3.jpg</file>
+        <file>Sup/Math7/4.1.jpg</file>
+        <file>Sup/Math7/4.jpg</file>
+        <file>Sup/Math7/5.jpg</file>
+        <file>Sup/Math7/6.jpg</file>
+        <file>Sup/Math7/7.jpg</file>
+        <file>Sup/Math7/8.jpg</file>
+        <file>Sup/Math7/9.jpg</file>
+        <file>Sup/Math7/10.jpg</file>
+        <file>Sup/Math7/11.jpg</file>
     </qresource>
 </RCC>

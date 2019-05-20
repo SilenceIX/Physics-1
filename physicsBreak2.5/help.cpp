@@ -24,6 +24,7 @@ void help::updspr(int c)
     case 2: l = sRect2(); break;
     case 3: l = sRect3(); break;
     //case 4: l = sRect4(); break;
+    case 7: l = sRect7(); break;
     default: l = new QVBoxLayout();
     }
 

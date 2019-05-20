@@ -12,9 +12,10 @@
 
 Qt3DCore::QEntity *addObject(Qt3DCore::QEntity *, QString, QString);
 
-const double PI = std::asin(1.);
+const double PI = M_PI;
 const double e = std::exp(1.);
 const double g = 9.8066;
+const double toGrad = 180. / PI;
 
 class Model
 {
@@ -115,6 +116,7 @@ private:
     QSlider *s1, *s2, *s3, *s4, *s5;
     Qt3DCore::QTransform *tr1, *tr2;
     QList<Plot *> plots;
+    double func(double axis, double speed);
 public:
     Model3();
     void Init();
@@ -170,8 +172,15 @@ private:
     QVBoxLayout *set, *inf;
     QLabel *i1, *k1;
     QSlider *s1;
-    Qt3DCore::QTransform *tr1;
+    Qt3DCore::QTransform *tr1, *tr2, *pruz;
     QList<Plot *> plots;
+
+    const int  k=100;               //коэффициент жесткости пружины, Н/м
+    const double l=0.5;             //длина нити, м
+    const double m=0.2;             //масса маятника (шара), кг
+    const double w1 =sqrt(g/l);     //1 собственная частота, 1/с^2
+    double d, st_angle1, st_angle2, t, angle1, angle2, Ep1, Ep2, Ek1, Ek2;
+    double D = 0.1, Start_angle1 = PI / 6, Start_angle2 = 0.0;
 public:
     Model5();
     void Init();
@@ -183,6 +192,7 @@ public:
     QVBoxLayout *GetInf() {return inf; }
     QString GetName() {return "Связанные физические маятники";}
     ~Model5(){}
+    double FuncW2();
 };
 
 class Model6 : public virtual Model, QObject
@@ -197,6 +207,9 @@ private:
     QSlider *s1;
     Qt3DCore::QTransform *tr1;
     QList<Plot *> plots;
+
+
+
 public:
     Model6();
     void Init();
@@ -209,6 +222,33 @@ public:
     QString GetName() {return "Оборотный маятник";}
     ~Model6(){}
 };
+
+
+class Model7 : public virtual Model, QObject
+{
+private:
+
+    void Transform();
+    void LoadModel();
+    Qt3DCore::QEntity *ent;
+    QVBoxLayout *set, *inf;
+    QLabel *i1, *k1;
+    QSlider *s1;
+    Qt3DCore::QTransform *tr1;
+    QList<Plot *> plots;
+public:
+    Model7();
+    void Init();
+    void Compute(double);
+    void Update(double);
+    void CreatePlot(int);
+    Qt3DCore::QEntity *GetEntity(){return ent; }
+    QVBoxLayout *GetSet(){return set; }
+    QVBoxLayout *GetInf() {return inf; }
+    QString GetName() {return "Маятник Галилея";}
+    ~Model7(){}
+};
+
 
 
 

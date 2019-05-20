@@ -32,12 +32,13 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->action_3, &QAction::triggered, [=](){exit(0);});
     connect(ui->action, &QAction::triggered, [=](){hwind->updspr(0); hwind->show();});
 
-    connect(ui->action_5, &QAction::triggered, [=](){curC = 0; on_pushButton_clicked();});
-    connect(ui->action_6, &QAction::triggered, [=](){curC = 1; on_pushButton_clicked();});
-    connect(ui->action_7, &QAction::triggered, [=](){curC = 2; on_pushButton_clicked();});
-    connect(ui->action_8, &QAction::triggered, [=](){curC = 3; on_pushButton_clicked();});
-    connect(ui->action_9, &QAction::triggered, [=](){curC = 4; on_pushButton_clicked();});
-    connect(ui->action_10, &QAction::triggered, [=](){curC = 5; on_pushButton_clicked();});
+    connect(ui->action_5, &QAction::triggered, [=](){if (curC == -1) on_pushButton_clicked(); curC = 0; on_pushButton_clicked();});
+    connect(ui->action_6, &QAction::triggered, [=](){if (curC == -1) on_pushButton_clicked(); curC = 1; on_pushButton_clicked();});
+    connect(ui->action_7, &QAction::triggered, [=](){if (curC == -1) on_pushButton_clicked(); curC = 2; on_pushButton_clicked();});
+    connect(ui->action_8, &QAction::triggered, [=](){if (curC == -1) on_pushButton_clicked(); curC = 3; on_pushButton_clicked();});
+    connect(ui->action_9, &QAction::triggered, [=](){if (curC == -1) on_pushButton_clicked(); curC = 4; on_pushButton_clicked();});
+    connect(ui->action_10, &QAction::triggered, [=](){if (curC == -1) on_pushButton_clicked(); curC = 5; on_pushButton_clicked();});
+    connect(ui->action_4, &QAction::triggered, [=](){if (curC == -1) on_pushButton_clicked(); curC = 6; on_pushButton_clicked();});
 
 
 
@@ -236,8 +237,6 @@ void MainWindow::on_room7_clicked()
 
 void MainWindow::on_pushButton_clicked()
 {
-    if (m != nullptr)
-        m->~Model();
     if (curC == -1)
         qDebug()<< "Error!";
     else if (curC != -2)
@@ -269,6 +268,9 @@ void MainWindow::on_pushButton_clicked()
             break;
         case 5:
             m = new Model6();
+            break;
+        case 6:
+            m = new Model7();
             break;
         default:
             m = new Model1();
@@ -306,7 +308,7 @@ void MainWindow::on_pushButton_clicked()
         camera->setFieldOfView(100.0f);
         camera->setPosition(QVector3D(20.0, 3.0, 0.0));
         camera->setViewCenter(QVector3D(19.0, 3.0, 0.0));
-
+        m->~Model();
         curC = -1;
         cur = 0;
         ui->pushButton->setText("Перейти в комнату");

@@ -363,6 +363,7 @@
     <addaction name="action_8"/>
     <addaction name="action_9"/>
     <addaction name="action_10"/>
+    <addaction name="action_4"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_4"/>
@@ -415,6 +416,11 @@
   <action name="action_10">
    <property name="text">
     <string>Оборотный маятник</string>
+   </property>
+  </action>
+  <action name="action_4">
+   <property name="text">
+    <string>Маятник Галилея</string>
    </property>
   </action>
  </widget>
