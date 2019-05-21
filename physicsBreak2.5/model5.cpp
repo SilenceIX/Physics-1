@@ -34,10 +34,13 @@ void Model5::LoadModel()
 
     tr1 = new Qt3DCore::QTransform();
     tr2 = new Qt3DCore::QTransform();
+    pruz = new Qt3DCore::QTransform();
     s1->addComponent(tr1);
     s2->addComponent(tr2);
+    pr->addComponent(pruz);
     tr1->setTranslation(QVector3D(-0.09, 1.08, -0.22));
     tr2->setTranslation(QVector3D(-0.09, 1.08, 0.22));
+    pruz->setTranslation(QVector3D(-0.09, 0.54, 0.0));
 
 
 }
