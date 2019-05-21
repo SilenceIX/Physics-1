@@ -9,6 +9,7 @@
 #include <QPushButton>
 #include <cmath>
 #include "plot.h"
+#include "model4/measurer.h"
 
 Qt3DCore::QEntity *addObject(Qt3DCore::QEntity *, QString, QString);
 
@@ -139,25 +140,44 @@ public:
 class Model4 : public virtual Model, QObject
 {
 private:
+    Qt3DCore::QEntity       *root     = nullptr;
+    physics ::object        *lab      = nullptr;
+    physics ::bullet        *bullet   = nullptr;
+    physics ::pendulum      *pendulum = nullptr;
+    physics ::measurer      *measurer = nullptr;
+    QPropertyAnimation      *P        = nullptr;
+    QPropertyAnimation      *M        = nullptr;
+    QParallelAnimationGroup *group    = nullptr;
+    QVBoxLayout *box                  = nullptr;
+    QSlider     *bullet_mass_slider   = nullptr;
+    QSlider     *pendulum_mass_slider = nullptr;
+    QSlider     *k_slider             = nullptr;
+    QSlider     *b_slider             = nullptr;
+    QLabel      *bullet_mass_Label    = nullptr;
+    QLabel      *pendulum_mass_Label  = nullptr;
+    QLabel      *k_label              = nullptr;
+    QLabel      *b_label              = nullptr;
 
-    void Transform();
-    void LoadModel();
-    Qt3DCore::QEntity *ent;
-    QVBoxLayout *set, *inf;
-    QLabel *i1, *k1;
-    QSlider *s1;
-    Qt3DCore::QTransform *tr1;
-    QList<Plot *> plots;
 public:
     Model4();
+    void start() const;
+
+    float get_l() const;
+    float get_g() const;
+    float get_k() const;
+    float get_b() const;
+    float get_T() const;
+    float get_omega() const;
+    physics::bullet   *get_bullet() const;
+    physics::pendulum *get_pendulum() const;
+    physics::measurer *get_measurer() const;
+
     void Init();
-    void Compute(double);
-    void Update(double);
-    void CreatePlot(int);
-    Qt3DCore::QEntity *GetEntity(){return ent; }
-    QVBoxLayout *GetSet(){return set; }
-    QVBoxLayout *GetInf() {return inf; }
-    QString GetName() {return "Измерение скорости пули с помощью баллистического маятника";}
+    void Update(double){return;}
+    Qt3DCore::QEntity *GetEntity() {return root;}
+    QVBoxLayout *GetSet(){return box;}
+    QVBoxLayout *GetInf(){return new QVBoxLayout();}
+    QString GetName(){return "Балистический маятник";}
     ~Model4(){}
 };
 

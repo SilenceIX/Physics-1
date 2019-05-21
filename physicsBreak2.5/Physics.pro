@@ -30,6 +30,11 @@ QMAKE_CXXFLAGS_RELEASE -= -O2
 SOURCES += \
         main.cpp \
     mainwindow.cpp \
+    model4/bullet.cpp \
+    model4/materialpoint.cpp \
+    model4/measurer.cpp \
+    model4/object.cpp \
+    model4/pendulum.cpp \
     movecamerainroom.cpp \
     help.cpp \
     sup.cpp \
@@ -46,6 +51,12 @@ SOURCES += \
 HEADERS += \
     mainwindow.h \
     help.h \
+    model4/bullet.h \
+    model4/materialpoint.h \
+    model4/measurer.h \
+    model4/object.h \
+    model4/pendulum.h \
+    model4/physics.h \
     models.h \
     qcustomplot.h \
     plot.h

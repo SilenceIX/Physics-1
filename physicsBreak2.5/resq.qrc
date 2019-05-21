@@ -39,22 +39,6 @@
         <file>Sup/Math3/2.png</file>
         <file>Sup/Math3/3.png</file>
         <file>Sup/Math3/8.png</file>
-        <file>Stands/Math4/doska.obj</file>
-        <file>Stands/Math4/doska.png</file>
-        <file>Stands/Math4/izmeritel.obj</file>
-        <file>Stands/Math4/izmeritel.png</file>
-        <file>Stands/Math4/knopka.obj</file>
-        <file>Stands/Math4/knopka.png</file>
-        <file>Stands/Math4/lineyka.obj</file>
-        <file>Stands/Math4/lineyka.png</file>
-        <file>Stands/Math4/mayatnik.obj</file>
-        <file>Stands/Math4/mayatnik.png</file>
-        <file>Stands/Math4/osi.obj</file>
-        <file>Stands/Math4/osi.png</file>
-        <file>Stands/Math4/pistol.obj</file>
-        <file>Stands/Math4/pistol.png</file>
-        <file>Stands/Math4/polka.obj</file>
-        <file>Stands/Math4/polka.png</file>
         <file>Stands/Math3/glassball.jpg</file>
         <file>splash.jpg</file>
         <file>Sup/Math1/1.jpg</file>
@@ -105,5 +89,15 @@
         <file>Sup/Math7/9.jpg</file>
         <file>Sup/Math7/10.jpg</file>
         <file>Sup/Math7/11.jpg</file>
+        <file>Stands/Math4/bullet.obj</file>
+        <file>Stands/Math4/bullet.png</file>
+        <file>Stands/Math4/lab.obj</file>
+        <file>Stands/Math4/lab.png</file>
+        <file>Stands/Math4/measurer.obj</file>
+        <file>Stands/Math4/measurer.png</file>
+        <file>Stands/Math4/pendulum.obj</file>
+        <file>Stands/Math4/pendulum.png</file>
+        <file>Stands/Math4/rope.obj</file>
+        <file>Stands/Math4/rope.png</file>
     </qresource>
 </RCC>
