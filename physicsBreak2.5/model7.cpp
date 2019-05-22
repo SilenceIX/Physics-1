@@ -25,6 +25,8 @@ void Model7::LoadModel()
     Qt3DCore::QEntity *p2 = addObject(ent, ":/Stands/Math7/cube.obj", ":/Stands/Math7/metal.jpg");
     Qt3DCore::QEntity *p3 = addObject(ent, ":/Stands/Math7/planka.obj", ":/Stands/Math7/metal.jpg");
     Qt3DCore::QEntity *p4 = addObject(ent, ":/Stands/Math7/sphere.obj", ":/Stands/Math7/metal.jpg");
+    Qt3DCore::QEntity *p5 = addObject(ent, ":/Stands/Math7/up_rope.obj", ":/Stands/Math7/rope.jpg");
+    Qt3DCore::QEntity *p6 = addObject(ent, ":/Stands/Math7/down_rope.obj", ":/Stands/Math7/rope.jpg");
 
 
 

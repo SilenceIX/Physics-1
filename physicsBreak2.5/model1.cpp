@@ -1,6 +1,5 @@
 #include "models.h"
 #include "plot.h"
-
 Qt3DCore::QEntity *addObject(Qt3DCore::QEntity *entity, QString obj, QString texture)
 {
       Qt3DCore::QEntity *mesh = new Qt3DCore::QEntity(entity);
@@ -25,6 +24,7 @@ Model1::Model1()
     ent = new Qt3DCore::QEntity();
     inf =  new QVBoxLayout();
     set =  new QVBoxLayout();
+    R = 0.0025;
     r = 0.5;
     k = 0.01;
     c = 0;
@@ -57,7 +57,7 @@ Model1::Model1()
     k1 = new QLabel("Начальный угол отклонения: 0.0 рад");
     k2 = new QLabel("Коэффициент сопротивления: 0.0");
     k3 = new QLabel("Циклическая частота: 0.02 рад/c");
-    k4 = new QLabel("Радиус: 0.1 м");
+    k4 = new QLabel("Расстояние до шара: 0.1 м");
     k5 = new QLabel("Коэффициент жесткости: 0.5");
     k6 = new QLabel("Масса: 1 кг");
 
@@ -70,7 +70,7 @@ Model1::Model1()
         k1->setText(QString("Начальный угол отклонения: %1 рад").arg(angle));
         this->Transform();
     });
-    s2 = new QSlider(Qt::Horizontal); s2->setMinimum(0); s2->setMaximum(1000);s2->setValue(0);
+    s2 = new QSlider(Qt::Horizontal); s2->setMinimum(0); s2->setMaximum(500);s2->setValue(0);
     connect(s2, &QSlider::valueChanged, [=]()
     {
         this->c = double(s2->value())/100;
@@ -80,7 +80,7 @@ Model1::Model1()
     connect(s4, &QSlider::valueChanged, [=]()
     {
         this->r = double(s4->value()) / 1000.;
-        k4->setText(QString("Радиус: %1 м").arg(r));
+        k4->setText(QString("Расстояние до шара: %1 м").arg(r));
         this->Transform();
     });
     s5 = new QSlider(Qt::Horizontal); s5->setMinimum(1); s5->setMaximum(100);s5->setValue(1);
@@ -112,8 +112,6 @@ Model1::Model1()
     set->addWidget(s4);
     set->addWidget(k2);
     set->addWidget(s2);
-    /*set->addWidget(k3);
-    set->addWidget(s3);*/
     set->addWidget(k5);
     set->addWidget(s5);
 
@@ -131,8 +129,9 @@ void Model1::Init()
 
 void Model1::Compute()
 {
-    omega = sqrt(k/(m*r*r));
-    beta = c/(4*sqrt(m*k)*omega*m*r*r);
+    J = 2*(2*m*R*R/5 + m*r*r);
+    omega = sqrt(k/J);
+    beta = c/(4*sqrt(m*k)*J);
     angle = A0 * pow(e, -beta * t) * cos(omega * t);
 }
 
@@ -219,5 +218,4 @@ double Model1::GetTime()
 {
     return t;
 }
-
 

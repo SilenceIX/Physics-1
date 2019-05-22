@@ -34,7 +34,7 @@ public:
 class Model1 : public virtual Model, QObject
 {
 private:
-    double A0, beta, omega, angle, t, r, c, k, m;
+    double A0, beta, omega, angle, t, r, c, k, m, R, J;
     Qt3DCore::QEntity *ent;
     QVBoxLayout *set, *inf;
     QLabel *i1, *i2, *k1, *k2, *k3, *k4, *k5, *k6;
@@ -59,6 +59,7 @@ public:
     QString GetName() {return "Торсионный маятник";}
     ~Model1(){}
 };
+
 
 class Model2 : public virtual Model, QObject
 {
