@@ -7,12 +7,12 @@ Model2::Model2()
     inf =  new QVBoxLayout();
     set =  new QVBoxLayout();
 
-    mass = 0.1;
-    radius = 0.05;
-    length = 0.15;
-    psi_dot = 500;
-    phi_dot = 0;
-    theta = 1.57;
+    s_mass = 0.1;
+    s_radius = 0.08;
+    s_length = 0.2;
+    s_psi_dot = 500;
+    s_phi_dot = 0;
+    s_theta = 1.57;
     t = new QElapsedTimer();
 
     LoadModel();
@@ -21,42 +21,94 @@ Model2::Model2()
     i1 = new QLabel("Угол отклонения: 0.0 рад");
     inf->addWidget(i1);
 
-    k1 = new QLabel("Начальный угол отклонения: 0.0 рад");
-    k2 = new QLabel("Коэффициент сопротивления: 0.0");
-    k3 = new QLabel("Цикличиская частота: 0.02 рад/c");
+    {
+        QLabel *k = new QLabel(QString("Длинна от вертикальной оси до диска: %1 м").arg(s_length));
+        QSlider *s = new QSlider(Qt::Horizontal); s->setMinimum(15); s->setMaximum(20); s->setValue(int(s_length * 100.));
+        connect(s, &QSlider::valueChanged, [=]()
+        {
+        s_length = double(s->value()) * 0.01;
+        k->setText(QString("Длинна от вертикальной оси до диска: %1 м").arg(s_length));
+        SetTransform();
+        });
+        set->addWidget(k);
+        set->addWidget(s);
 
-    s1 = new QSlider(Qt::Horizontal); s1->setMinimum(0); s1->setMaximum(int(PI * 500.));
-    connect(s1, &QSlider::valueChanged, [=]()
+    }
     {
-        //this->psi_dot = double(s1->value()) / 1000.;
-        k1->setText(QString("Начальный угол отклонения: %1 рад").arg(psi_dot));
-    });
-    s2 = new QSlider(Qt::Horizontal); s2->setMinimum(0); s2->setMaximum(1000);
-    connect(s2, &QSlider::valueChanged, [=]()
+        QLabel *k = new QLabel(QString("Масса диска: %1 кг").arg(s_mass));
+        QSlider *s = new QSlider(Qt::Horizontal); s->setMinimum(1); s->setMaximum(20); s->setValue(int(s_mass * 10.));
+        connect(s, &QSlider::valueChanged, [=]()
+        {
+        s_mass = double(s->value()) * 0.1;
+        k->setText(QString("Масса диска: %1кг").arg(s_mass));
+        });
+        set->addWidget(k);
+        set->addWidget(s);
+    }
     {
-        this->phi_dot = double(s2->value()) / 500.;
-        k2->setText(QString("Коэффициент сопротивления: %1").arg(phi_dot));
-    });
-    s3 = new QSlider(Qt::Horizontal); s3->setMinimum(1); s3->setMaximum(500);
-    connect(s3, &QSlider::valueChanged, [=]()
+        QLabel *k = new QLabel(QString("Радиус диска: %1 м").arg(s_radius));
+        QSlider *s = new QSlider(Qt::Horizontal); s->setMinimum(5); s->setMaximum(8); s->setValue(int(s_radius * 100.));
+        connect(s, &QSlider::valueChanged, [=]()
+        {
+        s_radius = double(s->value()) * 0.01;
+        k->setText(QString("Радиус диска: %1 м").arg(s_radius));
+        SetTransform();
+        });
+        set->addWidget(k);
+        set->addWidget(s);
+    }
     {
-        this->theta = double(s3->value()) / 50.;
-        k3->setText(QString("Цикличиская частота: %1 рад/c").arg(theta));
-    });
-    QPushButton *p1 = new QPushButton("Построить график перемещения");
-    connect(p1, &QPushButton::clicked, [=]()
+        QLabel *k = new QLabel(QString("Скорость вращения диска: %1 рад/с").arg(s_psi_dot));
+        QSlider *s = new QSlider(Qt::Horizontal); s->setMinimum(500); s->setMaximum(1000); s->setValue(int(s_psi_dot));
+        connect(s, &QSlider::valueChanged, [=]()
+        {
+        s_psi_dot = s->value();
+        k->setText(QString("Скорость вращения диска: %1 рад/с").arg(s_psi_dot));
+        });
+        set->addWidget(k);
+        set->addWidget(s);
+    }
     {
-        this->CreatePlot(0);
-    });
+        QLabel *k = new QLabel(QString("Угол наклона от вертикальной оси: %1 рад").arg(s_phi_dot));
+        QSlider *s = new QSlider(Qt::Horizontal); s->setMinimum(-30); s->setMaximum(30); s->setValue(int(s_phi_dot * 10.));
+        connect(s, &QSlider::valueChanged, [=]()
+        {
+        s_phi_dot = double(s->value()) * 0.1;
+        k->setText(QString("Начальня скорость прецессии диска: %1 рад/с").arg(s_phi_dot));
+        });
+        set->addWidget(k);
+        set->addWidget(s);
+    }
+    {
+        QLabel *k = new QLabel(QString("Начальня скорость прецессии диска: %1 рад/с").arg(s_theta));
+        QSlider *s = new QSlider(Qt::Horizontal); s->setMinimum(785); s->setMaximum(1570); s->setValue(int(s_theta * 1000));
+        connect(s, &QSlider::valueChanged, [=]()
+        {
+        s_theta = double(s->value()) * 0.001;
+        k->setText(QString("Начальня скорость прецессии диска: %1 рад/с").arg(s_theta));
+        });
+        set->addWidget(k);
+        set->addWidget(s);
+    }
 
 
-    set->addWidget(k1);
-    set->addWidget(s1);
-    set->addWidget(k2);
-    set->addWidget(s2);
-    set->addWidget(k3);
-    set->addWidget(s3);
-    set->addWidget(p1);
+
+
+}
+
+
+void Model2::SetTransform()
+{
+    QVector3D diskPos = QVector3D(cos(PI / 2 - theta)*sin(phi)*(0.56 + 10 * length),
+    sin(PI / 2 - theta)*(0.56 + 10 * length),
+    cos(PI / 2 - theta)*cos(phi)*(0.56 + 10 * length));
+
+    nutation = QQuaternion::fromAxisAndAngle(QVector3D(1.0, 0.0, 0.0), theta * toGrad - 90);
+    tr1->setRotation(precession * nutation * rotation);
+    tr2->setRotation(precession * nutation);
+
+    tr1->setScale3D(QVector3D(10 * radius, 10 * radius, 1.0));
+    tr1->setTranslation(diskPos * length / 0.2);
 }
 
 double Model2::dy1(double arg)
@@ -97,6 +149,12 @@ double Model2::dy4(double arg)
 
 void Model2::Init()
 {
+    mass = s_mass;
+    radius = s_radius;
+    length = s_length;
+    psi_dot = s_psi_dot;
+    phi_dot = s_phi_dot;
+    theta = s_theta;
     CalculateConstants();
     t->restart();
 }
@@ -161,7 +219,9 @@ void Model2::Transform()
 
     tr1->setRotation(precession * nutation * rotation);
     tr2->setRotation(precession * nutation);
-    tr3->setRotation(precession);}
+    tr3->setRotation(precession);
+
+}
 
 void Model2::LoadModel()
 {
@@ -199,8 +259,8 @@ void Model2::Update(double dt)
 {
 
     double delt = double(t->elapsed()) * 1e-3;
-    for (double i = 0; i * 1e-5 < delt; ++i)
-        Compute(dt * 1e-5);
+    for (double i = 0; i * 1e-5 < delt / 4.; ++i)
+        Compute(1e-5);
     Transform();
     t->restart();
     for (auto plot : plots)

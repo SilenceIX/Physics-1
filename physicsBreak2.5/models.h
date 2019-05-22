@@ -13,6 +13,7 @@
 
 Qt3DCore::QEntity *addObject(Qt3DCore::QEntity *, QString, QString);
 
+
 const double PI = M_PI;
 const double e = std::exp(1.);
 const double g = 9.8066;
@@ -66,6 +67,7 @@ class Model2 : public virtual Model, QObject
 private:
     double I_psi, I0;
     double mass, radius, length;
+    double s_mass, s_radius, s_length, s_psi_dot, s_phi_dot, s_theta;
     double psi, psi_dot;
     double phi, phi_dot;
     double theta, theta_dot;
@@ -76,8 +78,7 @@ private:
     void LoadModel();
     Qt3DCore::QEntity *ent;
     QVBoxLayout *set, *inf;
-    QLabel *i1, *i2, *k1, *k2, *k3;
-    QSlider *s1, *s2, *s3;
+    QLabel *i1, *i2;
     Qt3DCore::QTransform *tr1, *tr2, *tr3, *tr4;
     QList<Plot *> plots;
     double dy1(double arg);
@@ -101,6 +102,7 @@ public:
     QVBoxLayout *GetInf() {return inf; }
     QString GetName() {return "Моделирование прецессии и нутации гироскопа";}
     ~Model2(){}
+    void SetTransform();
 };
 
 class Model3 : public virtual Model, QObject

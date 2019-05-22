@@ -19,6 +19,9 @@ Qt3DCore::QEntity *addObject(Qt3DCore::QEntity *entity, QString obj, QString tex
       return mesh;
 }
 
+
+
+
 Model1::Model1()
 {
     ent = new Qt3DCore::QEntity();
