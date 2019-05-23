@@ -1,0 +1,37 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Stands/Math1/base.obj</file>
+        <file>Stands/Math1/full.png</file>
+        <file>Stands/Math1/palka.jpg</file>
+        <file>Stands/Math1/palka.obj</file>
+        <file>Stands/Math1/shar1.obj</file>
+        <file>Stands/Math1/shar2.obj</file>
+        <file>Stands/Math1/sharik.jpg</file>
+        <file>Stands/Math2/axis.obj</file>
+        <file>Stands/Math2/axisMat.png</file>
+        <file>Stands/Math2/box.obj</file>
+        <file>Stands/Math2/boxMat.png</file>
+        <file>Stands/Math2/disk.obj</file>
+        <file>Stands/Math2/diskMat.png</file>
+        <file>Stands/Math2/stand.obj</file>
+        <file>Stands/Math2/standMat.png</file>
+        <file>Stands/Math3/podstavka.obj</file>
+        <file>Stands/Math3/podstavka2.jpg</file>
+        <file>Stands/Math3/treeball.jpg</file>
+        <file>Stands/Math3/treeball.obj</file>
+        <file>Stands/Math4/doska.obj</file>
+        <file>Stands/Math4/doska.png</file>
+        <file>Stands/Math4/izmeritel.obj</file>
+        <file>Stands/Math4/izmeritel.png</file>
+        <file>Stands/Math4/knopka.obj</file>
+        <file>Stands/Math4/knopka.png</file>
+        <file>Stands/Math4/lineyka.obj</file>
+        <file>Stands/Math4/lineyka.png</file>
+        <file>Stands/Math4/mayatnik.obj</file>
+        <file>Stands/Math4/mayatnik.png</file>
+        <file>Stands/Math4/osi.obj</file>
+        <file>Stands/Math4/osi.png</file>
+        <file>Stands/Math4/pistol.obj</file>
+        <file>Stands/Math4/pistol.png</file>
+    </qresource>
+</RCC>

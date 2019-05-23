@@ -80,6 +80,7 @@ private:
     QVBoxLayout *set, *inf;
     QLabel *i1, *i2;
     Qt3DCore::QTransform *tr1, *tr2, *tr3, *tr4;
+    QVector3D diskPos;
     QList<Plot *> plots;
     double dy1(double arg);
     double dy2(double arg);

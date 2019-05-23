@@ -14,10 +14,16 @@ Model2::Model2()
     s_phi_dot = 0;
     s_theta = 1.57;
 
+<<<<<<< HEAD
     phi = 0;
 
 
 
+=======
+    phi = 0.0;
+    psi = 0.0;
+    theta_dot = 0.0;
+>>>>>>> b458fa59cb4570800ff7058a1b0da3a831186c1b
     t = new QElapsedTimer();
 
     LoadModel();
@@ -91,29 +97,39 @@ Model2::Model2()
         {
         s_theta = double(s->value()) * 0.001;
         k->setText(QString("Начальня скорость прецессии диска: %1 рад/с").arg(s_theta));
+        SetTransform();
         });
         set->addWidget(k);
         set->addWidget(s);
     }
 
-
-
-
+    Init();
+    SetTransform();
 }
-
 
 void Model2::SetTransform()
 {
+<<<<<<< HEAD
     QVector3D diskPos = QVector3D(cos(PI / 2 - s_theta)*sin(phi)*(0.56 + 10 * s_length),
     sin(PI / 2 - s_theta)*(0.56 + 10 * s_length),
     cos(PI / 2 - s_theta)*cos(phi)*(0.56 + 10 * s_length));
+=======
+    diskPos = QVector3D(cos(PI / 2 - s_theta)*sin(phi)*(2.5 * s_length - 0.45),
+    0.95 + sin(PI / 2 - s_theta)*(2.5 * s_length - 0.45),
+    cos(PI / 2 - s_theta)*cos(phi)*(2.5 * s_length - 0.45));
+>>>>>>> b458fa59cb4570800ff7058a1b0da3a831186c1b
 
     nutation = QQuaternion::fromAxisAndAngle(QVector3D(1.0, 0.0, 0.0), s_theta * toGrad - 90);
     tr1->setRotation(precession * nutation * rotation);
     tr2->setRotation(precession * nutation);
 
+<<<<<<< HEAD
     tr1->setScale3D(QVector3D(s_radius / 0.8, s_radius / 0.8, 1.0));
     tr1->setTranslation(diskPos * (s_length - 0.35) / 0.2);
+=======
+    tr1->setScale3D(QVector3D(2.5 * s_radius, 2.5 * s_radius, 0.25));
+    tr1->setTranslation((diskPos - QVector3D(0.0, 0.95, 0.0)) * s_length / 0.2 + QVector3D(0.0, 0.95, 0.0));
+>>>>>>> b458fa59cb4570800ff7058a1b0da3a831186c1b
 }
 
 double Model2::dy1(double arg)
@@ -221,10 +237,20 @@ void Model2::Transform()
     rotation = QQuaternion::fromAxisAndAngle(QVector3D(0.0, 0.0, 1.0),  toGrad * psi);
     precession = QQuaternion::fromAxisAndAngle(QVector3D(0.0, 1.0, 0.0), toGrad * phi);
     nutation = QQuaternion::fromAxisAndAngle(QVector3D(1.0, 0.0, 0.0), toGrad * theta - 90);
+<<<<<<< HEAD
+=======
+
+>>>>>>> b458fa59cb4570800ff7058a1b0da3a831186c1b
     tr1->setRotation(precession * nutation * rotation);
     tr2->setRotation(precession * nutation);
     tr3->setRotation(precession);
     SetTransform();
+
+    diskPos = QVector3D(cos(PI / 2 - s_theta)*sin(phi)*(2.5 * s_length - 0.45),
+                        0.95 + sin(PI / 2 - s_theta)*(2.5 * s_length - 0.45),
+                        cos(PI / 2 - s_theta)*cos(phi)*(2.5 * s_length - 0.45));
+
+    tr1->setTranslation(diskPos);
 
 }
 
