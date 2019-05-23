@@ -158,8 +158,8 @@ void MainWindow::mouseWheel(QWheelEvent *ev)
         else
             radius += 0.1f;
 
-        if (radius < 2)
-            radius = 2.f;
+        if (radius < 1)
+            radius = 1.f;
 
         if (radius > 5.5f)
             radius = 5.5f;
@@ -299,7 +299,7 @@ void MainWindow::on_pushButton_clicked()
                     float(sin(beta))*radius,
                     float(cos(beta)*sin(alpha))*radius);
         camera->setPosition(pos);
-        camera->setViewCenter(QVector3D(0.0, 0.0, 0.0));
+        camera->setViewCenter(QVector3D(0.0, 0.25, 0.0));
         uprend->start();
     }
     else

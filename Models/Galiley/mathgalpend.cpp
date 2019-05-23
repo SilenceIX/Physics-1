@@ -2,14 +2,11 @@
 
 // Движение "слева", т.е. обычный математический маятник
 void galpend::Compute_left_down()
-{
-    double omega = 0.0;
-
-    omega = sqrt(g / l);
-    angle = A0 * cos(omega * t);
+{        
+    angle = A0 * cos(W * t);
     x = -l * sin(angle);
     y = -l * cos(angle);
-    velocity = -A0 * omega * sin(omega * t);
+    velocity = -A0 * W * sin(W * t);
     Ek = m * pow(velocity, 2) / 2;
     Ep = m * g * pow(angle, 2) / (2 * l);
     E = Ek + Ep;
@@ -18,65 +15,58 @@ void galpend::Compute_left_down()
 // Движение "справа", сжатый маятник
 void galpend::Compute_right()
 {
-    double k = 0.0;
-    double omega = 0.0;
-
-    k = l / h; // Коэффициент сжатия
-    omega = sqrt(g * k / l);
-    angle = A0 * sqrt(k) * cos(omega * t);
+    k = l / h;
+    W1 = sqrt(g * k / l);
+    angle = A0 * sqrt(k) * cos(W1 * t);
     x = -l / k * sin(angle);
     y = -l / k * cos(angle) - l * (1 - 1 / k);
-    velocity = -A0 * sqrt(k) * omega * sin(omega * t);
+    velocity = -A0 * sqrt(k) * W1 * sin(W1 * t);
     Ek = m * pow(velocity, 2) / 2;
     Ep = m * g * pow(angle, 2) / (2 * h);
     E = Ek + Ep;
 }
 
-void galpend::func()
+void galpend::Init()
 {
-        double angle = 0.0;
-        double omega = 0.0;
+    t = 0.;
+}
 
-        // Вычисление начального положения, т.е. Xmin и Ymax, t = 0
-        omega = sqrt(g / l);
-        angle = A0 * cos(omega * t);
-        x = -l * sin(angle);
-        y = -l * cos(angle);
-        velocity = -A0 * omega * sin(omega * t);
-        Ek = m * pow(velocity, 2) / 2;
-        Ep = m * g * pow(angle, 2) / (2 * l);
-        E = Ek + Ep;
-        t += dt;
-        T += dt;
-
-        // Соответствующие периоды колебаний
-        double T_left = 2 * M_PI * sqrt(l / g);
-        double T_right = 2 * M_PI * sqrt(h / g);
-
-        while (T <= 5.0)
+void galpend::Compute(double dt)
+{
+    t+=dt;
+    if (x <= 0.0)
+    {
+         Compute_left_down();
+    }
+    else
+    {
+        if (t1 < 3 * T_right / 4)
         {
-            while (x <= 0.0)
+            Compute_right();
+            t1 += dt;
+        }
+        else
+        {
+            if (t2 < T_left)
             {
                 Compute_left_down();
-                /*fout << T << "\t" << P.E << std::endl;*/ // Тут должно быть оживление маятника
-                t += dt;
-                T += dt;
+                t2+=dt;
             }
-            t = T_right / 4;
-            while (t < 3 * T_right / 4)
-            {
-                Compute_right();
-                /*fout << T << "\t" << P.E << std::endl;*/ // Тут должно быть оживление маятника
-                t += dt;
-                T += dt;
-            }
-            t = 3 * T_left / 4;
-            while (t < T_left)
-            {
-                Compute_left_down();
-                /*fout << T << "\t" << P.E << std::endl;*/ // Тут должно быть оживление маятника
-                t += dt;
-                T += dt;
+            else {
+                t1 = T_right / 4;
+                t2 = 3 * T_left / 4;
             }
         }
+    }
+}
+
+void galpend::Transform()
+{
+
+}
+
+void galpend::Update(double dt)
+{
+    Compute(dt);
+    Transform();
 }

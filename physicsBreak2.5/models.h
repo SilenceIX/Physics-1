@@ -257,8 +257,18 @@ private:
     QVBoxLayout *set, *inf;
     QLabel *i1, *k1;
     QSlider *s1;
-    Qt3DCore::QTransform *tr1;
+    Qt3DCore::QTransform *tr1, *g1, *g2, *gq;
     QList<Plot *> plots;
+    const double l = 1.0;
+    double scr = 0;
+
+
+
+    double A0, h, m, t;
+    double angle, W, W1, k, velocity, Ek, Ep, E, x, y, t1, t2, T_left, T_right;
+
+    void Compute_left();
+    void Compute_right();
 public:
     Model7();
     void Init();

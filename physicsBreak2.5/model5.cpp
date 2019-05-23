@@ -17,6 +17,9 @@ void Model5::Transform()
 {
     tr1->setRotation(QQuaternion::fromAxisAndAngle(QVector3D(1.0, 0.0, 0.0), float(angle1 * 90. / PI)));
     tr2->setRotation(QQuaternion::fromAxisAndAngle(QVector3D(1.0, 0.0, 0.0), float(angle2 * 90. / PI)));
+
+    double x1, x2;
+    //pruz->setScale3D(QVector3D())
 }
 
 void Model5::LoadModel()

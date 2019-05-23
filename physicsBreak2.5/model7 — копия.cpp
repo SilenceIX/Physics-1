@@ -4,7 +4,7 @@
 Model7::Model7()
 {
     A0 = 1.0;   // Амплитуда
-    h = 0.51;    //высота планки
+    h = 0.4;    //высота планки
     m = 0.5;    //масса груза
     ent = new Qt3DCore::QEntity();
     inf =  new QVBoxLayout();
@@ -35,8 +35,8 @@ Model7::Model7()
         h = double(s->value()) * 0.01;
         k->setText(QString("Высота планки: %1 м").arg(h));
         tr1->setTranslation(QVector3D(0., 0.1 + h * 1.4, 0.));
-        Transform();
-
+        g1->setScale3D(QVector3D(1., 1. - h, 1.));
+        g2->setScale3D(QVector3D(1., 1. + h, 1.));
         });
         set->addWidget(k);
         set->addWidget(s);
@@ -86,49 +86,24 @@ void Model7::Transform()
     if (angle < 0)
     {
         g1->setRotationX(angle * toGrad);
-        g1->setScale3D(QVector3D(1., 2., 1.));
-        g2->setScale(0.);
-        //g2->setRotationX(angle * toGrad);
-        //g2->setTranslation(QVector3D(0., 1.443 * (1. + 1.5 * (h - 0.51)), 0.));
-
+        g2->setMatrix(QMatrix4x4());
+        g2->setTranslation(QVector3D(0., 1.443, 0.));
+        g2->setRotationX(angle * toGrad);
         gq->setRotationX(angle * toGrad);
-
-        //g2->setScale3D(QVector3D(1., 1. + 2.225 * (h - 0.51), 1.0));
     }
     else
     {
         g1->setRotationX(0.);
-        g1->setScale3D(QVector3D(1., 1. - 2.225 * (h - 0.51), 1.));
-        //g2->setScale3D(QVector3D(1., 1. + 2.225 * (h - 0.51), 1.));
-        QMatrix4x4 matrix = g2->rotateAround(QVector3D(0., 0.7215 + (h - 0.51) * 1.4 + 0.0935, 0.), angle * toGrad, QVector3D(1., 0., 0.));
-        matrix.translate(0., 1.443, 0.);
-        gq->setMatrix(matrix);
-        matrix.translate(0., -1.443, 0.);
-        matrix.scale(1., 1. + 2.225 * (h - 0.51), 1.);
-        matrix.translate(0., 1.443 * (1. - 0.1384 * (pow(h, -1.168)) * (h - 0.51)), 0.);
-        g2->setMatrix(matrix);
-
-
-
-
-
-
-        /*auto matrix = g2->matrix();
+        auto matrix = g2->matrix();
         matrix.setToIdentity();
-        //matrix.translate(QVector3D(0., 1.443 * 0.564796 , 0.));
-
         matrix.translate(QVector3D(0., 0.815, 0.));
         matrix.rotate(angle * toGrad, QVector3D(1., 0., 0.));
         matrix.translate(QVector3D(0., 0.628, 0.));
-        //matrix.translate(QVector3D(0., 1.443 * 0.435204, 0.));
         g2->setMatrix(matrix);
-        g2->setScale3D(QVector3D(1., 1. + 2.225 * (h - 0.51), 1.));
-        //g2->setTranslation(QVector3D(0., 1.443 * (1. + 1.94 * (h - 0.51)), 0.));
         gq->setMatrix(matrix);
         //g2->setMatrix(g2->rotateAround(QVector3D(0., -9., 0.), angle * toGrad, QVector3D(1., 0., 0.)));
         //g2->rot
         //g2->setTranslation(QVector3D(0., 1.443, 0.));
-        //g2->setScale3D(QVector3D(1., 1. + 2.225 * (h - 0.51), 1.));*/
     }
 }
 
