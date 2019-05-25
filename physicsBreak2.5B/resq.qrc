@@ -31,15 +31,10 @@
         <file>Stands/Math2/diskMat.png</file>
         <file>Stands/Math2/stand.obj</file>
         <file>Stands/Math2/standMat.png</file>
-        <file>Stands/Math3/podstavka.obj</file>
-        <file>Stands/Math3/podstavka2.jpg</file>
-        <file>Stands/Math3/treeball.jpg</file>
-        <file>Stands/Math3/treeball.obj</file>
         <file>Sup/Math3/1.png</file>
         <file>Sup/Math3/2.png</file>
         <file>Sup/Math3/3.png</file>
         <file>Sup/Math3/8.png</file>
-        <file>Stands/Math3/glassball.jpg</file>
         <file>splash.jpg</file>
         <file>Sup/Math1/1.jpg</file>
         <file>Sup/Math1/2.jpg</file>
@@ -100,7 +95,15 @@
         <file>Stands/Math4/rope.obj</file>
         <file>Stands/Math4/rope.png</file>
         <file>Stands/Math7/rope.jpg</file>
+        <file>Stands/Math3/podstavka.obj</file>
+        <file>Stands/Math3/stand.jpg</file>
         <file>Stands/Math3/stick.obj</file>
         <file>Stands/Math3/stpen.obj</file>
+        <file>Stands/Math3/text.jpg</file>
+        <file>Stands/Math3/transp.jpg</file>
+        <file>Stands/Math3/transportir.obj</file>
+        <file>Stands/Math3/treeball.jpg</file>
+        <file>Stands/Math3/treeball.obj</file>
+        <file>Stands/Math3/arrow.obj</file>
     </qresource>
 </RCC>

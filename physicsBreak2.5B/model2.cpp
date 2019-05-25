@@ -7,12 +7,12 @@ Model2::Model2()
     inf =  new QVBoxLayout();
     set =  new QVBoxLayout();
 
-    s_mass = 0.1;
-    s_radius = 0.08;
-    s_length = 0.2;
-    s_psi_dot = 500;
-    s_phi_dot = 0;
-    s_theta = 1.57;
+    mass = 0.1;
+    radius = 0.08;
+    length = 0.2;
+    psi_dot = 500;
+    phi_dot = 0;
+    theta = 1.57;
 
     phi = 0;
 
@@ -27,73 +27,73 @@ Model2::Model2()
     inf->addWidget(i1);
 
     {
-        QLabel *k = new QLabel(QString("Длинна от вертикальной оси до диска: %1 м").arg(s_length));
-        QSlider *s = new QSlider(Qt::Horizontal); s->setMinimum(15); s->setMaximum(20); s->setValue(int(s_length * 100.));
-        connect(s, &QSlider::valueChanged, [=]()
+        QLabel *k = new QLabel(QString("Длинна от вертикальной оси до диска: %1 м").arg(length));
+        s1 = new QSlider(Qt::Horizontal); s1->setMinimum(15); s1->setMaximum(20); s1->setValue(int(length * 100.));
+        connect(s1, &QSlider::valueChanged, [=]()
         {
-        s_length = double(s->value()) * 0.01;
-        k->setText(QString("Длинна от вертикальной оси до диска: %1 м").arg(s_length));
+        length = double(s1->value()) * 0.01;
+        k->setText(QString("Длинна от вертикальной оси до диска: %1 м").arg(length));
         SetTransform();
         });
         set->addWidget(k);
-        set->addWidget(s);
+        set->addWidget(s1);
 
     }
     {
-        QLabel *k = new QLabel(QString("Масса диска: %1 кг").arg(s_mass));
-        QSlider *s = new QSlider(Qt::Horizontal); s->setMinimum(1); s->setMaximum(20); s->setValue(int(s_mass * 10.));
-        connect(s, &QSlider::valueChanged, [=]()
+        QLabel *k = new QLabel(QString("Масса диска: %1 кг").arg(mass));
+        s2 = new QSlider(Qt::Horizontal); s2->setMinimum(1); s2->setMaximum(20); s2->setValue(int(mass * 10.));
+        connect(s2, &QSlider::valueChanged, [=]()
         {
-        s_mass = double(s->value()) * 0.1;
-        k->setText(QString("Масса диска: %1кг").arg(s_mass));
+        mass = double(s2->value()) * 0.1;
+        k->setText(QString("Масса диска: %1кг").arg(mass));
         });
         set->addWidget(k);
-        set->addWidget(s);
+        set->addWidget(s2);
     }
     {
-        QLabel *k = new QLabel(QString("Радиус диска: %1 м").arg(s_radius));
-        QSlider *s = new QSlider(Qt::Horizontal); s->setMinimum(5); s->setMaximum(8); s->setValue(int(s_radius * 100.));
-        connect(s, &QSlider::valueChanged, [=]()
+        QLabel *k = new QLabel(QString("Радиус диска: %1 м").arg(radius));
+        s3 = new QSlider(Qt::Horizontal); s3->setMinimum(5); s3->setMaximum(8); s3->setValue(int(radius * 100.));
+        connect(s3, &QSlider::valueChanged, [=]()
         {
-        s_radius = double(s->value()) * 0.01;
-        k->setText(QString("Радиус диска: %1 м").arg(s_radius));
+        radius = double(s3->value()) * 0.01;
+        k->setText(QString("Радиус диска: %1 м").arg(radius));
         SetTransform();
         });
         set->addWidget(k);
-        set->addWidget(s);
+        set->addWidget(s3);
     }
     {
-        QLabel *k = new QLabel(QString("Скорость вращения диска: %1 рад/с").arg(s_psi_dot));
-        QSlider *s = new QSlider(Qt::Horizontal); s->setMinimum(500); s->setMaximum(1000); s->setValue(int(s_psi_dot));
-        connect(s, &QSlider::valueChanged, [=]()
+        QLabel *k = new QLabel(QString("Скорость вращения диска: %1 рад/с").arg(psi_dot));
+        s4 = new QSlider(Qt::Horizontal); s4->setMinimum(500); s4->setMaximum(1000); s4->setValue(int(psi_dot));
+        connect(s4, &QSlider::valueChanged, [=]()
         {
-        s_psi_dot = s->value();
-        k->setText(QString("Скорость вращения диска: %1 рад/с").arg(s_psi_dot));
+        psi_dot = s4->value();
+        k->setText(QString("Скорость вращения диска: %1 рад/с").arg(psi_dot));
         });
         set->addWidget(k);
-        set->addWidget(s);
+        set->addWidget(s4);
     }
     {
-        QLabel *k = new QLabel(QString("Угол наклона от вертикальной оси: %1 рад").arg(s_phi_dot));
-        QSlider *s = new QSlider(Qt::Horizontal); s->setMinimum(-30); s->setMaximum(30); s->setValue(int(s_phi_dot * 10.));
-        connect(s, &QSlider::valueChanged, [=]()
+        QLabel *k = new QLabel(QString("Угол наклона от вертикальной оси: %1 рад").arg(phi_dot));
+        s5 = new QSlider(Qt::Horizontal); s5->setMinimum(-30); s5->setMaximum(30); s5->setValue(int(phi_dot * 10.));
+        connect(s5, &QSlider::valueChanged, [=]()
         {
-        s_phi_dot = double(s->value()) * 0.1;
-        k->setText(QString("Начальня скорость прецессии диска: %1 рад/с").arg(s_phi_dot));
+        phi_dot = double(s5->value()) * 0.1;
+        k->setText(QString("Начальня скорость прецессии диска: %1 рад/с").arg(phi_dot));
         });
         set->addWidget(k);
-        set->addWidget(s);
+        set->addWidget(s5);
     }
     {
-        QLabel *k = new QLabel(QString("Начальня скорость прецессии диска: %1 рад/с").arg(s_theta));
-        QSlider *s = new QSlider(Qt::Horizontal); s->setMinimum(785); s->setMaximum(1570); s->setValue(int(s_theta * 1000));
-        connect(s, &QSlider::valueChanged, [=]()
+        QLabel *k = new QLabel(QString("Начальня скорость прецессии диска: %1 рад/с").arg(theta));
+        s6 = new QSlider(Qt::Horizontal); s6->setMinimum(785); s6->setMaximum(1570); s6->setValue(int(theta * 1000));
+        connect(s6, &QSlider::valueChanged, [=]()
         {
-        s_theta = double(s->value()) * 0.001;
-        k->setText(QString("Начальня скорость прецессии диска: %1 рад/с").arg(s_theta));
+        theta = double(s6->value()) * 0.001;
+        k->setText(QString("Начальня скорость прецессии диска: %1 рад/с").arg(theta));
         });
         set->addWidget(k);
-        set->addWidget(s);
+        set->addWidget(s6);
     }
 
 
@@ -104,16 +104,26 @@ Model2::Model2()
 
 void Model2::SetTransform()
 {
-    QVector3D diskPos = QVector3D(cos(PI / 2 - s_theta)*sin(phi)*(0.56 + 10 * s_length),
-    sin(PI / 2 - s_theta)*(0.56 + 10 * s_length),
-    cos(PI / 2 - s_theta)*cos(phi)*(0.56 + 10 * s_length));
+    QVector3D diskPos = QVector3D(cos(PI / 2 - theta)*sin(phi)*(0.56 + 10 * length),
+    sin(PI / 2 - theta)*(0.56 + 10 * length),
+    cos(PI / 2 - theta)*cos(phi)*(0.56 + 10 * length));
 
-    nutation = QQuaternion::fromAxisAndAngle(QVector3D(1.0, 0.0, 0.0), s_theta * toGrad - 90);
+    nutation = QQuaternion::fromAxisAndAngle(QVector3D(1.0, 0.0, 0.0), theta * toGrad - 90);
     tr1->setRotation(precession * nutation * rotation);
     tr2->setRotation(precession * nutation);
 
-    tr1->setScale3D(QVector3D(s_radius / 0.8, s_radius / 0.8, 1.0));
-    tr1->setTranslation(diskPos * (s_length - 0.35) / 0.2);
+    tr1->setScale3D(QVector3D(radius / 0.8, radius / 0.8, 1.0));
+    tr1->setTranslation(diskPos * (length - 0.35) / 0.2);
+}
+
+void Model2::lock(bool b)
+{
+    s1->setEnabled(!b);
+    s2->setEnabled(!b);
+    s3->setEnabled(!b);
+    s4->setEnabled(!b);
+    s5->setEnabled(!b);
+    s6->setEnabled(!b);
 }
 
 double Model2::dy1(double arg)
@@ -154,12 +164,6 @@ double Model2::dy4(double arg)
 
 void Model2::Init()
 {
-    mass = s_mass;
-    radius = s_radius;
-    length = s_length;
-    psi_dot = s_psi_dot;
-    phi_dot = s_phi_dot;
-    theta = s_theta;
     CalculateConstants();
     t->restart();
 }

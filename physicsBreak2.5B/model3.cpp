@@ -4,7 +4,6 @@
 void Model3::Transform()
 {
     tr1->setRotation(QQuaternion::fromAxisAndAngle(QVector3D(0.0, 0.0, 1.0), float(A * toGrad)));
-    //tr2->setRotation(QQuaternion::fromAxisAndAngle(QVector3D(0.0, 0.0, 1.0), float(A * toGrad)));
     auto mat = tr2->rotateAround(QVector3D(0., 1.6f, 0.), float(A * toGrad), QVector3D(0.0, 0.0, 1.0));
     mat.translate(0.f, float(-0.0665 * sL + 1.1676), 0.1f);
     if (sr > 0.)
@@ -13,17 +12,18 @@ void Model3::Transform()
     //tr2->setTranslation(QVector3D(0., float(0.6), 0.));
     tr3->setRotation(QQuaternion::fromAxisAndAngle(QVector3D(0.0, 0.0, 1.0), float(A * toGrad)));
 }
-
 void Model3::LoadModel()
 {
     addObject(ent, ":/Res/Room.obj", ":/Res/Room.png");
     addObject(ent, ":/Res/tablemetal.obj", ":/Res/tablemetal.png");
     addObject(ent, ":/Res/ceiling.obj", ":/Res/ceiling.jpg");
 
-    addObject(ent, ":/Stands/Math3/podstavka.obj", ":/Stands/Math3/podstavka2.jpg");
+    addObject(ent, ":/Stands/Math3/podstavka.obj", ":/Stands/Math3/stand.jpg");
+    addObject(ent, ":/Stands/Math3/transportir.obj", ":/Stands/Math3/transp.jpg");
     Qt3DCore::QEntity *stick = addObject(ent, ":/Stands/Math3/stick.obj", ":/Stands/Math3/treeball.jpg");
     Qt3DCore::QEntity *ball = addObject(ent, ":/Stands/Math3/treeball.obj", ":/Stands/Math3/treeball.jpg");
     Qt3DCore::QEntity *st = addObject(ent, ":/Stands/Math3/stpen.obj", ":/Stands/Math3/treeball.jpg");
+    Qt3DCore::QEntity *arr = addObject(ent, ":/Stands/Math3/arrow.obj", ":/Stands/Math3/text.jpg");
 
     tr1 = new Qt3DCore::QTransform();
     tr2 = new Qt3DCore::QTransform();
@@ -38,8 +38,6 @@ void Model3::LoadModel()
     tr2->setTranslation(QVector3D(0.0, 0.6f, 0.1f));
     tr3->setTranslation(QVector3D(0.0, 1.6f, 0.0));
 }
-
-
 Model3::Model3()
 {
     ent = new Qt3DCore::QEntity();
@@ -74,12 +72,6 @@ Model3::Model3()
     inf->addWidget(cGraf);
     inf->addWidget(lGraf);
     inf->addWidget(sGraf);
-
-
-
-
-
-
 
 
     i1 = new QLabel("Угол отклонения: 0.0 рад");
@@ -154,7 +146,7 @@ Model3::Model3()
             s3->setEnabled(false);
         } else
         {
-            sr = 3.5;
+            sr = double(s3->value()) / 1000.;
             s3->setEnabled(true);
         }
         Transform();
@@ -165,9 +157,6 @@ Model3::Model3()
 
 
 }
-
-
-
 void Model3::Init()
 {
     time = 0.;
@@ -178,13 +167,11 @@ void Model3::Init()
     W = sW;
     S = PI * sr * sr;
 }
-
 double Model3::func(double axis, double speed)
 {
     double r = -g * sin(axis) / L - (speed > 0 ? 1 : -1) * Cx * pl * speed * speed * S / (2 * M);
     return fabs(r) > 5e-2 ? r : 0.;
 }
-
 void Model3::Compute(double dt)
 {
     double K[4], Q[4];
@@ -207,7 +194,6 @@ void Model3::Compute(double dt)
     Ek = M * W * W * L * L / 2;
     Ep = M * g * L * (1 - cos(A));
 }
-
 void Model3::Update(double dt)
 {
     time += dt;
@@ -223,14 +209,11 @@ void Model3::Update(double dt)
                 plot->Destroy();
                 plots.removeOne(plot);
             }
-
     i1->setText(QString("Угол отклонения: %1 рад").arg(A));
     i2->setText(QString("Угловая скорость: %1 рад/с").arg(W));
     i3->setText(QString("Угловое ускорение %1 рад/c<sup>2</sup>").arg(E));
     i4->setText(QString("Энергия: %1 Дж").arg(GetEnergy()));
-
 }
-
 void Model3::Update_plot(double dt, int maxtime)
 {
     time = 0;
@@ -248,6 +231,12 @@ void Model3::Update_plot(double dt, int maxtime)
     A = sa;
     W = sw;
 }
+
+void Model3::lock(bool b)
+{
+    set->setEnabled(!b);
+}
+
 
 void Model3::CreatePlot(int plotID)
 {
@@ -306,7 +295,6 @@ void Model3::CreatePlot(int plotID)
         plots.append(plot);
     }
 }
-
 void Model3::GetMenu(QMenu *m)
 {
 

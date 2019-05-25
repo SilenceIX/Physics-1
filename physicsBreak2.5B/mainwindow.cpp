@@ -353,12 +353,14 @@ void MainWindow::on_startBut_clicked()
         time = 0;
         stime = clock();
         lTime->setText("Время: 00:00:00");
+        m->lock(true);
         ui->startBut->setText("Остановить");
         timer->start();
     }
     else
     {
         timer->stop();
+        m->lock(false);
         ui->startBut->setText("Запуск маятника");
     }
 }

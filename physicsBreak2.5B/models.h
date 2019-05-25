@@ -28,6 +28,7 @@ public:
     virtual Qt3DCore::QEntity *GetEntity() = 0;
     virtual QVBoxLayout *GetSet() = 0;
     virtual QVBoxLayout *GetInf() = 0;
+    virtual void lock(bool) = 0;
     virtual void GetMenu(QMenu *) = 0;
     virtual QString GetName() = 0;
     virtual ~Model() = default;
@@ -41,7 +42,9 @@ private:
     Qt3DCore::QEntity *ent;
     QVBoxLayout *set, *inf;
     QLabel *i1, *i2, *k1, *k2, *k3, *k4, *k5, *k6;
-    QSlider *s1, *s2, *s3, *s4, *s5, *s6;
+    QSlider *s1, *s2, *s4, *s5, *s6;
+    QCheckBox *cGraf;
+    QSlider *sGraf;
     Qt3DCore::QTransform *tr1, *tr2, *tr3;
     QList<Plot *> plots;
 public:
@@ -56,12 +59,13 @@ public:
     double GetOmega();
     double GetAngle();
     double GetTime();
-    void GetMenu(QMenu *) {return;}
+    void GetMenu(QMenu *);
     Qt3DCore::QEntity *GetEntity();
     QVBoxLayout *GetSet();
     QVBoxLayout *GetInf();
     QString GetName() {return "Колебания торсионного маятника";}
-    ~Model1(){}
+    void lock(bool);
+    ~Model1(){}    
     void Update_plot(double dt, int maxtime);
 };
 
@@ -71,7 +75,6 @@ class Model2 : public virtual Model, QObject
 private:
     double I_psi, I0;
     double mass, radius, length;
-    double s_mass, s_radius, s_length, s_psi_dot, s_phi_dot, s_theta;
     double psi, psi_dot;
     double phi, phi_dot;
     double theta, theta_dot;
@@ -84,6 +87,7 @@ private:
     QVBoxLayout *set, *inf;
     QLabel *i1, *i2;
     Qt3DCore::QTransform *tr1, *tr2, *tr3, *tr4;
+    QSlider *s1, *s2, *s3, *s4, *s5, *s6;
     QList<Plot *> plots;
     double dy1(double arg);
     double dy2(double arg);
@@ -108,6 +112,7 @@ public:
     QString GetName() {return "Моделирование прецессии и нутации гироскопа";}
     ~Model2(){}
     void SetTransform();
+    void lock(bool);
 };
 
 class Model3 : public virtual Model, QObject
@@ -148,6 +153,7 @@ public:
     QString GetName() {return "Колебания жесткого математического маятника с большими амплитудами";}
     ~Model3(){}
     void Update_plot(double dt, int maxtime);
+    void lock(bool);
 };
 
 class Model4 : public virtual Model, QObject
@@ -193,6 +199,7 @@ public:
     void GetMenu(QMenu *) {return;}
     QString GetName(){return "Измерение скорости пули с помощью баллистического маятника";}
     ~Model4(){}
+    void lock(bool){}
 };
 
 
@@ -228,6 +235,7 @@ public:
     QString GetName() {return "Колебания связанных физических маятников";}
     ~Model5(){}
     double FuncW2();
+    void lock(bool){}
 };
 
 class Model6 : public virtual Model, QObject
@@ -257,6 +265,7 @@ public:
     void GetMenu(QMenu *) {return;}
     QString GetName() {return "Колебания оборотного маятника";}
     ~Model6(){}
+    void lock(bool){}
 };
 
 
@@ -294,6 +303,7 @@ public:
     void GetMenu(QMenu *) {return;}
     QString GetName() {return "Колебания маятника Галилея";}
     ~Model7(){}
+    void lock(bool){}
 };
 
 

@@ -52,6 +52,28 @@ Model1::Model1()
     obj2->addComponent(tr2);
     obj3->addComponent(tr3);
 
+    tr2->setTranslation(QVector3D(float(-(0.2 + 1.3 * r)), 1.08089f, 0.f));
+    tr3->setTranslation(QVector3D(float(0.2 + 1.3 * r), 1.08089f, 0.f));
+
+
+
+    QLabel *lGraf = new QLabel(QString("Количечетсво значений: %1").arg(500));
+    sGraf = new QSlider(Qt::Horizontal); sGraf->setMinimum(50); sGraf->setMaximum(15000); sGraf->setValue(500);
+    cGraf = new QCheckBox("Моментально построение графиков");
+    connect(sGraf, &QSlider::valueChanged, [=](int d){
+        lGraf->setText(QString("Количечетсво значений: %1").arg(d));
+    });
+    cGraf->setCheckState(Qt::Checked);
+    connect(cGraf, &QCheckBox::stateChanged, [=](int k){
+        if (k == 0)
+            sGraf->setEnabled(false);
+        else
+            sGraf->setEnabled(true);
+    });
+    inf->addWidget(cGraf);
+    inf->addWidget(lGraf);
+    inf->addWidget(sGraf);
+
 
 
     i1 = new QLabel("Угол отклонения: 0.0 рад");
@@ -71,7 +93,7 @@ Model1::Model1()
         this->angle = double(s1->value()) / 1000.;
         A0 = angle;
         k1->setText(QString("Начальный угол отклонения: %1 рад").arg(angle));
-        this->Transform();
+        Transform();
     });
     s2 = new QSlider(Qt::Horizontal); s2->setMinimum(0); s2->setMaximum(500);s2->setValue(0);
     connect(s2, &QSlider::valueChanged, [=]()
@@ -83,28 +105,20 @@ Model1::Model1()
     connect(s4, &QSlider::valueChanged, [=]()
     {
         this->r = double(s4->value()) / 1000.;
-        k4->setText(QString("Расстояние до шара: %1 м").arg(r));
-        this->Transform();
+        k4->setText(QString("Расстояние от центра до шара: %1 м").arg(r));
+        Transform();
     });
     s5 = new QSlider(Qt::Horizontal); s5->setMinimum(1); s5->setMaximum(100);s5->setValue(1);
     connect(s5, &QSlider::valueChanged, [=]()
     {
         this->k = double(s5->value())/100;
         k5->setText(QString("Коэффициент жесткости: %1").arg(k));
-        this->Transform();
     });
     s6 = new QSlider(Qt::Horizontal); s6->setMinimum(1); s6->setMaximum(2000);s6->setValue(1000);
     connect(s6, &QSlider::valueChanged, [=]()
     {
         this->m = double(s6->value()) / 1000.;
         k6->setText(QString("Масса: %1 кг").arg(m));
-        this->Transform();
-    });
-    QPushButton *p1 = new QPushButton("Построить график перемещения");
-    connect(p1, &QPushButton::clicked, [=]()
-    {
-        this->CreatePlot(0);
-        this->Update_plot(0.05,500);
     });
 
 
@@ -118,43 +132,47 @@ Model1::Model1()
     set->addWidget(s2);
     set->addWidget(k5);
     set->addWidget(s5);
-
-    set->addWidget(p1);
-
-
-
-
 }
 
 void Model1::Init()
 {
     t = 0.;
+    J = 2*(2*m*R*R/5 + m*r*r);
+    omega = sqrt(k/J);
+    beta = c/(4*sqrt(m*k)*J);
 }
 
 void Model1::Update_plot(double dt, int maxtime)
 {
+    double stime = t;
     t=0;
     for (int i=0;i<maxtime;i++){
-    t+=dt;
-    Compute();
-    for (auto plot : plots)
+        for (int j=0;j<timesPrint;++j)
+        {
+            t += dt;
+            Compute();
+        }
+        for (auto plot : plots)
             plot->Update();
     }
+    t = stime;
 }
 
 void Model1::Compute()
 {
-    J = 2*(2*m*R*R/5 + m*r*r);
-    omega = sqrt(k/J);
-    beta = c/(4*sqrt(m*k)*J);
     angle = A0 * pow(e, -beta * t) * cos(omega * t);
 }
 
 void Model1::Transform()
 {
-   tr1->setRotation(QQuaternion::fromAxisAndAngle(QVector3D(0.0, 1.0, 0.0), float(angle * 180. / PI)));
-   tr2->setRotation(QQuaternion::fromAxisAndAngle(QVector3D(0.0, 1.0, 0.0), float(angle * 180. / PI)));
-   tr3->setRotation(QQuaternion::fromAxisAndAngle(QVector3D(0.0, 1.0, 0.0), float(angle * 180. / PI)));
+   tr1->setRotation(QQuaternion::fromAxisAndAngle(QVector3D(0.0, 1.0, 0.0), float(angle * toGrad)));
+
+   QMatrix4x4 m1 = tr2->rotateAround(QVector3D(0.f, 0.f, 0.f), float(angle * toGrad), QVector3D(0.0, 1.0, 0.0));
+   QMatrix4x4 m2 = m1;
+   m1.translate(float(-(0.2 + 1.3 * r)), 1.08089f, 0.f);
+   m2.translate(float(0.2 + 1.3 * r), 1.08089f, 0.f);
+   tr2->setMatrix(m1);
+   tr3->setMatrix(m2);
 }
 
 void Model1::Update(double dt)
@@ -162,16 +180,15 @@ void Model1::Update(double dt)
     t+=dt;
     Compute();
     Transform();
-
-    for (auto plot : plots)
-        if (plot->GetState() == Plot::State::Active)
-            plot->Update();
-        else
-        {
-            plot->Destroy();
-            plots.removeOne(plot);
-        }
-
+    if (!cGraf->checkState() && (int64_t(t * 1000) % timesPrint == 0))
+        for (auto plot : plots)
+            if (plot->GetState() == Plot::State::Active)
+                plot->Update();
+            else
+            {
+                plot->Destroy();
+                plots.removeOne(plot);
+            }
     i1->setText(QString("Угол отклонения: %1 рад/c").arg(angle));
 }
 
@@ -229,8 +246,56 @@ QVBoxLayout *Model1::GetInf()
     return inf;
 }
 
+void Model1::lock(bool b)
+{
+    s1->setEnabled(!b);
+    s2->setEnabled(!b);
+    s4->setEnabled(!b);
+    s5->setEnabled(!b);
+    s6->setEnabled(!b);
+}
+
 double Model1::GetTime()
 {
     return t;
+}
+
+void Model1::GetMenu(QMenu *m)
+{
+    QMenu *a1 = new QMenu("Графики энергии", m);
+    QAction *a1_1 = new QAction("Потенциальная энергия", a1);
+    QAction *a1_2 = new QAction("Кинетическая энергия", a1);
+    QAction *a1_3 = new QAction("Полня энергия", a1);
+
+    m->addMenu(a1);
+    a1->addAction(a1_1);
+    a1->addAction(a1_2);
+    a1->addAction(a1_3);
+
+    QAction *a2 = new QAction("Угловое смещение", m);
+
+    m->addAction(a2);
+
+    connect(a1_1, &QAction::triggered, [=](){
+        this->CreatePlot(1);
+        if (cGraf->checkState())
+            this->Update_plot(0.001,sGraf->value());
+    });
+    connect(a1_2, &QAction::triggered, [=](){
+        this->CreatePlot(2);
+        if (cGraf->checkState())
+            this->Update_plot(0.001,sGraf->value());
+    });
+    connect(a1_3, &QAction::triggered, [=](){
+        this->CreatePlot(3);
+        if (cGraf->checkState())
+            this->Update_plot(0.001,sGraf->value());
+    });
+    connect(a2, &QAction::triggered, [=](){
+        this->CreatePlot(0);
+        if (cGraf->checkState())
+            this->Update_plot(0.001,sGraf->value());
+    });
+
 }
 
