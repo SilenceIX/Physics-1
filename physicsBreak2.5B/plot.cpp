@@ -2,7 +2,7 @@
 #include "ui_plot.h"
 #include "mainwindow.h"
 
-Plot::Plot(std::function<double()> getarg, std::function<double()> getvalue, QString s,QWidget *p) :
+Plot::Plot(std::function<double()> getarg, std::function<double()> getvalue, QString s,double ysize, QWidget *p) :
     QMainWindow(p),
     ui(new Ui::Plot),
     getarg(getarg),
@@ -20,9 +20,10 @@ Plot::Plot(std::function<double()> getarg, std::function<double()> getvalue, QSt
 
 
     plot->addGraph();
-    plot->xAxis->setRange(0, 20);
-    plot->yAxis->setRange(-5, 5);
-
+    plot->xAxis->setRange(0, 10);
+    if (ysize>0.)
+        plot->yAxis->setRange(-ysize*2.0, ysize*2.0);
+    else plot->yAxis->setRange(-1,1);
     plot->setInteractions(QCP::iRangeDrag|QCP::iRangeZoom);
 }
 
@@ -48,6 +49,7 @@ void Plot::Update()
     double arg = getarg();
     double value = getvalue();
 
+
     args.append(arg);
     values.append(value);
 
@@ -56,15 +58,14 @@ void Plot::Update()
         args.removeAt(0);
         values.removeAt(0);
     }
-
     Draw(args.toVector(), values.toVector());
 }
 
 void Plot::Draw(QVector<double> args, QVector<double> values)
 {
     plot->graph(0)->setData(args, values, true);
-    if (args.last() > 18)
-        plot->xAxis->setRange(args.last() - 18, args.last() + 2);
+    //if (args.last() > 18)
+    //    plot->xAxis->setRange(args.last() - 18, args.last() + 2);
     plot->replot();
 }
 
@@ -72,6 +73,7 @@ void Plot::Restart()
 {
     args.clear();
     values.clear();
-    plot->xAxis->setRange(-18, 2);
+    //plot->yAxis->setRange(-ysize*1.15, ysize*1.15);
+    //plot->xAxis->setRange(-18, 2);
     plot->replot();
 }

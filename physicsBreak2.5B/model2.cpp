@@ -282,14 +282,14 @@ void Model2::CreatePlot(int plotID)
 
     switch (plotID)
     {
-        case 0:
+        /*case 0:
             plot = new Plot([this]()->double{ return this->GetTime(); },
                             [this]()->double{ return this->GetPhi(); },  "Углол Phi");
         break;
         case 1:
             plot = new Plot([this]()->double{ return this->GetTime(); },
                             [this]()->double{ return this->GetPsi(); }, "Углол Psi");
-        break;
+        break;*/
     }
 
 

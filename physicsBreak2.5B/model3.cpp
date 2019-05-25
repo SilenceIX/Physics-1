@@ -3,7 +3,15 @@
 
 void Model3::Transform()
 {
-    tr1->setRotation(QQuaternion::fromAxisAndAngle(QVector3D(0.0, 0.0, 1.0), float(A * 90. / PI)));
+    tr1->setRotation(QQuaternion::fromAxisAndAngle(QVector3D(0.0, 0.0, 1.0), float(A * toGrad)));
+    //tr2->setRotation(QQuaternion::fromAxisAndAngle(QVector3D(0.0, 0.0, 1.0), float(A * toGrad)));
+    auto mat = tr2->rotateAround(QVector3D(0., 1.6f, 0.), float(A * toGrad), QVector3D(0.0, 0.0, 1.0));
+    mat.translate(0.f, float(-0.0665 * sL + 1.1676), 0.1f);
+    if (sr > 0.)
+        mat.scale(float(0.2 * sr));
+    tr2->setMatrix(mat);
+    //tr2->setTranslation(QVector3D(0., float(0.6), 0.));
+    tr3->setRotation(QQuaternion::fromAxisAndAngle(QVector3D(0.0, 0.0, 1.0), float(A * toGrad)));
 }
 
 void Model3::LoadModel()
@@ -13,15 +21,24 @@ void Model3::LoadModel()
     addObject(ent, ":/Res/ceiling.obj", ":/Res/ceiling.jpg");
 
     addObject(ent, ":/Stands/Math3/podstavka.obj", ":/Stands/Math3/podstavka2.jpg");
-    Qt3DCore::QEntity *pend = addObject(ent, ":/Stands/Math3/treeball.obj", ":/Stands/Math3/treeball.jpg");
+    Qt3DCore::QEntity *stick = addObject(ent, ":/Stands/Math3/stick.obj", ":/Stands/Math3/treeball.jpg");
+    Qt3DCore::QEntity *ball = addObject(ent, ":/Stands/Math3/treeball.obj", ":/Stands/Math3/treeball.jpg");
+    Qt3DCore::QEntity *st = addObject(ent, ":/Stands/Math3/stpen.obj", ":/Stands/Math3/treeball.jpg");
 
     tr1 = new Qt3DCore::QTransform();
+    tr2 = new Qt3DCore::QTransform();
+    tr3 = new Qt3DCore::QTransform();
 
     //tr2 = new Qt3DCore::QTransform();
 
-    pend->addComponent(tr1);
-    tr1->setTranslation(QVector3D(0.0, 1.6f, 0.0));
+    st->addComponent(tr1);
+    ball->addComponent(tr2);
+    stick->addComponent(tr3);
+    tr1->setTranslation(QVector3D(0.0, 1.6f, 0.1f));
+    tr2->setTranslation(QVector3D(0.0, 0.6f, 0.1f));
+    tr3->setTranslation(QVector3D(0.0, 1.6f, 0.0));
 }
+
 
 Model3::Model3()
 {
@@ -36,7 +53,34 @@ Model3::Model3()
     sA = PI / 4.;
     A = sA;
     sW = 0.;
+
+    tr1->setScale3D(QVector3D(1., float(0.4 + 0.06 * sL), 1.));
     Transform();
+
+
+    QLabel *lGraf = new QLabel(QString("Количечетсво значений: %1").arg(500));
+    sGraf = new QSlider(Qt::Horizontal); sGraf->setMinimum(50); sGraf->setMaximum(15000); sGraf->setValue(500);
+    cGraf = new QCheckBox("Моментально построение графиков");
+    connect(sGraf, &QSlider::valueChanged, [=](int d){
+        lGraf->setText(QString("Количечетсво значений: %1").arg(d));
+    });
+    cGraf->setCheckState(Qt::Checked);
+    connect(cGraf, &QCheckBox::stateChanged, [=](int k){
+        if (k == 0)
+            sGraf->setEnabled(false);
+        else
+            sGraf->setEnabled(true);
+    });
+    inf->addWidget(cGraf);
+    inf->addWidget(lGraf);
+    inf->addWidget(sGraf);
+
+
+
+
+
+
+
 
     i1 = new QLabel("Угол отклонения: 0.0 рад");
     i2 = new QLabel("Угловая скорость: 0.0 рад/с");
@@ -59,20 +103,24 @@ Model3::Model3()
         this->sM = double(s1->value()) / 100.;
         k1->setText(QString("Масса шара: %1 кг").arg(sM));
     });
-    s2 = new QSlider(Qt::Horizontal); s2->setMinimum(1); s2->setMaximum(10000); s2->setValue(int(sL * 1000.));
+    s2 = new QSlider(Qt::Horizontal); s2->setMinimum(100); s2->setMaximum(10000); s2->setValue(int(sL * 1000.));
     connect(s2, &QSlider::valueChanged, [=]()
     {
         this->sL = double(s2->value()) / 1000.;
         k2->setText(QString("Длина стержня: %1 м").arg(sL));
+        tr1->setScale3D(QVector3D(1., float(0.4 + 0.06 * sL), 1.));
+        Transform();
+
     });
 
-    s3 = new QSlider(Qt::Horizontal); s3->setMinimum(1); s3->setMaximum(10000); s3->setValue(int(sr * 1000.));
+    s3 = new QSlider(Qt::Horizontal); s3->setMinimum(1000); s3->setMaximum(10000); s3->setValue(int(sr * 1000.));
     connect(s3, &QSlider::valueChanged, [=]()
     {
         this->sr = double(s3->value()) / 1000.;
         k3->setText(QString("Радиус шара: %1 м").arg(sr));
+        Transform();
     });
-    s4 = new QSlider(Qt::Horizontal); s4->setMinimum(int(-2 * PI * 10000.)); s4->setMaximum(int(2 * PI * 10000.)); s4->setValue(int(sA * 10000.));
+    s4 = new QSlider(Qt::Horizontal); s4->setMinimum(int(- PI * 10000.)); s4->setMaximum(int(PI * 10000.)); s4->setValue(int(sA * 10000.));
     connect(s4, &QSlider::valueChanged, [=]()
     {
         this->sA = double(s4->value()) / 10000.;
@@ -86,32 +134,6 @@ Model3::Model3()
         this->sW = double(s5->value()) / 100.;
         k5->setText(QString("Начальная скорость маятника: %1 рад/c").arg(sW));
     });
-
-    QPushButton *p1 = new QPushButton("Построить график перемещения");
-    connect(p1, &QPushButton::clicked, [=]()
-    {
-        this->CreatePlot(0);
-    });
-    QPushButton *p2 = new QPushButton("Построить график скорости");
-    connect(p2, &QPushButton::clicked, [=]()
-    {
-        this->CreatePlot(1);
-    });
-    QPushButton *p3 = new QPushButton("Построить график потенциальной энергии");
-    connect(p3, &QPushButton::clicked, [=]()
-    {
-        this->CreatePlot(2);
-    });
-    QPushButton *p4 = new QPushButton("Построить график кинетической энергии");
-    connect(p4, &QPushButton::clicked, [=]()
-    {
-        this->CreatePlot(3);
-    });
-    QPushButton *p5 = new QPushButton("Построить график энергии");
-    connect(p5, &QPushButton::clicked, [=]()
-    {
-        this->CreatePlot(4);
-    });
     set->addWidget(k1);
     set->addWidget(s1);
     set->addWidget(k2);
@@ -122,11 +144,26 @@ Model3::Model3()
     set->addWidget(s4);
     set->addWidget(k5);
     set->addWidget(s5);
-    set->addWidget(p1);
-    set->addWidget(p2);
-    set->addWidget(p3);
-    set->addWidget(p4);
-    set->addWidget(p5);
+
+    QCheckBox *ch = new QCheckBox("Учитывать лобовое сопротивление воздуха");
+    ch->setCheckState(Qt::Checked);
+    connect(ch, &QCheckBox::stateChanged, [=](int k){
+        if (k == 0)
+        {
+            sr = 0.;
+            s3->setEnabled(false);
+        } else
+        {
+            sr = 3.5;
+            s3->setEnabled(true);
+        }
+        Transform();
+    });
+    set->addWidget(ch);
+
+
+
+
 }
 
 
@@ -176,14 +213,16 @@ void Model3::Update(double dt)
     time += dt;
     Compute(dt);
     Transform();
-    for (auto plot : plots)
-        if (plot->GetState() == Plot::State::Active)
-            plot->Update();
-        else
-        {
-            plot->Destroy();
-            plots.removeOne(plot);
-        }
+
+    if (!cGraf->checkState() && (int64_t(time * 1000) % timesPrint == 0))
+        for (auto plot : plots)
+            if (plot->GetState() == Plot::State::Active)
+                plot->Update();
+            else
+            {
+                plot->Destroy();
+                plots.removeOne(plot);
+            }
 
     i1->setText(QString("Угол отклонения: %1 рад").arg(A));
     i2->setText(QString("Угловая скорость: %1 рад/с").arg(W));
@@ -192,32 +231,72 @@ void Model3::Update(double dt)
 
 }
 
+void Model3::Update_plot(double dt, int maxtime)
+{
+    time = 0;
+    double sa = this->GetA();
+    double sw = this->GetW();
+    for (int i=0;i<maxtime;i++){
+        for (int j=0;j<timesPrint;++j)
+        {
+            time += dt;
+            Compute(dt);
+        }
+        for (auto plot : plots)
+            plot->Update();
+    }
+    A = sa;
+    W = sw;
+}
+
 void Model3::CreatePlot(int plotID)
 {
+    this->Init();
     Plot *plot = nullptr;
 
     switch (plotID)
     {
-        case 0:
+        case 0:{
+        YSize=this->A;
+        plot = new Plot([this]()->double{ return this->GetTime(); },
+                            [this]()->double{ return this->GetA(); }, "Угловое смещение, рад",abs(YSize));
+
+        break;}
+    case 1:{
+        Compute(0.05);
+        YSize=this->W;
+        this->Init();
+        plot = new Plot([this]()->double{ return this->GetTime(); },
+                            [this]()->double{ return this->GetW(); }, "Угловая скорость, рад/c",abs(YSize));
+
+            break;}
+    case 2:{
+        YSize=this->M * g * this->L * (1 - cos(this->A));
+        plot = new Plot([this]()->double{ return this->GetTime(); },
+                            [this]()->double{ return this->GetEp(); }, "Потенциальная энергия, Дж",abs(YSize));
+            break;}
+    case 3:{
+            Compute(0.05);
+
+            YSize = this->M * this->W * this->W * this->L * this->L / 2;
             plot = new Plot([this]()->double{ return this->GetTime(); },
-                            [this]()->double{ return this->GetA(); }, "Угловое смещение, рад");
-        break;
-        case 1:
-            plot = new Plot([this]()->double{ return this->GetTime(); },
-                            [this]()->double{ return this->GetW(); }, "Угловая скорость, рад/c");
-        break;
-        case 2:
-            plot = new Plot([this]()->double{ return this->GetTime(); },
-                            [this]()->double{ return this->GetEp(); }, "Потенциальная энергия, Дж");
-        break;
-        case 3:
-            plot = new Plot([this]()->double{ return this->GetTime(); },
-                            [this]()->double{ return this->GetEk(); }, "Кинетическая энергия, Дж");
-        break;
-        case 4:
-            plot = new Plot([this]()->double{ return this->GetTime(); },
-                            [this]()->double{ return this->GetEnergy(); }, "Полная энергия, Дж");
-        break;
+                            [this]()->double{ return this->GetEk(); }, "Кинетическая энергия, Дж",abs(YSize));
+
+            break;}
+    case 4:
+    Compute(0.05);
+    YSize=this->M * g * this->L * (1 - cos(this->A)) + this->M * this->W * this->W * this->L * this->L / 2;
+        plot = new Plot([this]()->double{ return this->GetTime(); },
+                        [this]()->double{ return this->GetEnergy(); }, "Полная энергия, Дж",abs(YSize));
+
+    break;
+    case 5:
+    Compute(0.05);
+    YSize=this->M * g * this->L * (1 - cos(this->A)) + this->M * this->W * this->W * this->L * this->L / 2;
+        plot = new Plot([this]()->double{ return this->GetTime(); },
+                        [this]()->double{ return this->GetEnergy(); }, "Угловое ускорение, рад/с^2",abs(YSize));
+
+    break;
     }
 
 
@@ -227,3 +306,60 @@ void Model3::CreatePlot(int plotID)
         plots.append(plot);
     }
 }
+
+void Model3::GetMenu(QMenu *m)
+{
+
+    QMenu *a1 = new QMenu("Графики энергии", m);
+    QAction *a1_1 = new QAction("Потенциальная энергия", a1);
+    QAction *a1_2 = new QAction("Кинетическая энергия", a1);
+    QAction *a1_3 = new QAction("Полня энергия", a1);
+
+    m->addMenu(a1);
+    a1->addAction(a1_1);
+    a1->addAction(a1_2);
+    a1->addAction(a1_3);
+
+    QMenu *a2 = new QMenu("Графики системы", m);
+    QAction *a2_1 = new QAction("Угловое смещение", a2);
+    QAction *a2_2 = new QAction("Угловая скорость", a2);
+    QAction *a2_3 = new QAction("Угловое ускорение", a2);
+
+    m->addMenu(a2);
+    a2->addAction(a2_1);
+    a2->addAction(a2_2);
+    a2->addAction(a2_3);
+
+    connect(a1_1, &QAction::triggered, [=](){
+        this->CreatePlot(2);
+        if (cGraf->checkState())
+            this->Update_plot(0.001,sGraf->value());
+    });
+    connect(a1_2, &QAction::triggered, [=](){
+        this->CreatePlot(3);
+        if (cGraf->checkState())
+            this->Update_plot(0.001,sGraf->value());
+    });
+    connect(a1_3, &QAction::triggered, [=](){
+        this->CreatePlot(4);
+        if (cGraf->checkState())
+            this->Update_plot(0.001,sGraf->value());
+    });
+
+    connect(a2_1, &QAction::triggered, [=](){
+        this->CreatePlot(0);
+        if (cGraf->checkState())
+            this->Update_plot(0.001,sGraf->value());
+    });
+    connect(a2_2, &QAction::triggered, [=](){
+        this->CreatePlot(1);
+        if (cGraf->checkState())
+            this->Update_plot(0.001,sGraf->value());
+    });
+    connect(a2_3, &QAction::triggered, [=](){
+        this->CreatePlot(5);
+        if (cGraf->checkState())
+            this->Update_plot(0.001,sGraf->value());
+    });
+}
+

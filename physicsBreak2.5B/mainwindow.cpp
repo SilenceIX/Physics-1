@@ -32,13 +32,13 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->action_3, &QAction::triggered, [=](){exit(0);});
     connect(ui->action, &QAction::triggered, [=](){hwind->updspr(0); hwind->show();});
 
-    connect(ui->action_5, &QAction::triggered, [=](){if (curC == -1) on_pushButton_clicked(); curC = 0; on_pushButton_clicked();});
-    connect(ui->action_6, &QAction::triggered, [=](){if (curC == -1) on_pushButton_clicked(); curC = 1; on_pushButton_clicked();});
-    connect(ui->action_7, &QAction::triggered, [=](){if (curC == -1) on_pushButton_clicked(); curC = 2; on_pushButton_clicked();});
-    connect(ui->action_8, &QAction::triggered, [=](){if (curC == -1) on_pushButton_clicked(); curC = 3; on_pushButton_clicked();});
-    connect(ui->action_9, &QAction::triggered, [=](){if (curC == -1) on_pushButton_clicked(); curC = 4; on_pushButton_clicked();});
-    connect(ui->action_10, &QAction::triggered, [=](){if (curC == -1) on_pushButton_clicked(); curC = 5; on_pushButton_clicked();});
-    connect(ui->action_4, &QAction::triggered, [=](){if (curC == -1) on_pushButton_clicked(); curC = 6; on_pushButton_clicked();});
+    connect(ui->action_5, &QAction::triggered, [=](){if (curC == -2) on_pushButton_clicked(); curC = 0; on_pushButton_clicked();});
+    connect(ui->action_6, &QAction::triggered, [=](){if (curC == -2) on_pushButton_clicked(); curC = 1; on_pushButton_clicked();});
+    connect(ui->action_7, &QAction::triggered, [=](){if (curC == -2) on_pushButton_clicked(); curC = 2; on_pushButton_clicked();});
+    connect(ui->action_8, &QAction::triggered, [=](){if (curC == -2) on_pushButton_clicked(); curC = 3; on_pushButton_clicked();});
+    connect(ui->action_9, &QAction::triggered, [=](){if (curC == -2) on_pushButton_clicked(); curC = 4; on_pushButton_clicked();});
+    connect(ui->action_10, &QAction::triggered, [=](){if (curC == -2) on_pushButton_clicked(); curC = 5; on_pushButton_clicked();});
+    connect(ui->action_4, &QAction::triggered, [=](){if (curC == -2) on_pushButton_clicked(); curC = 6; on_pushButton_clicked();});
 
 
 
@@ -77,7 +77,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     timer = new QTimer();
-    timer->setInterval(10);
+    timer->setInterval(15);
     connect(timer, SIGNAL(timeout()), this, SLOT(Update()));
 
     hwind = new help();
@@ -87,6 +87,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     ui->startBut->setHidden(true);
+    ui->menuBar->actions()[2]->setVisible(false);
 
     CreateEntity();
     initModels();
@@ -179,11 +180,19 @@ void MainWindow::CreateEntity()
 
 void MainWindow::Update()
 {
-    m->Update(0.005);
-    time += 1;
-    lTime->setText(QString("Время: %1:%2:%3").arg(time / 100 / 60, 2, 10,
-                                                  QLatin1Char('0')).arg(time / 100 % 60, 2, 10,
-                                                                        QLatin1Char('0')).arg(time % 100, 2, 10, QLatin1Char('0')));
+    clock_t t2 = clock();
+    clock_t del = t2 - stime;
+    if (del < 1000.)
+    {
+        time += del;
+        for (double k = 0; k < double(del); k += expand)
+            m->Update(0.001);
+        lTime->setText(QString("Время: %1:%2:%3").arg(time / 1000 / 60, 2, 10,
+                                                      QLatin1Char('0')).arg(time / 1000 % 60, 2, 10,
+                                                                            QLatin1Char('0')).arg(time /10 % 100, 2, 10, QLatin1Char('0')));
+    }
+    stime = t2;
+
 }
 
 void MainWindow::Repaint()
@@ -291,7 +300,10 @@ void MainWindow::on_pushButton_clicked()
         ui->status->setVisible(true);
         ui->setup->setVisible(true);
         cur = curC + 1;
-        curC = -2;
+        curC = -2;        
+        ui->menu_2->clear();
+        m->GetMenu(ui->menu_2);
+        ui->menuBar->actions()[2]->setVisible(true);
         this->setWindowTitle(m->GetName());
 
         camera->setFieldOfView(60.0f);
@@ -318,6 +330,8 @@ void MainWindow::on_pushButton_clicked()
         ui->numbers->setVisible(true);
         ui->setup->removeWidget(ui->setup->widget(0));
         ui->status->removeWidget(ui->setup->widget(0));
+        ui->menu_2->clear();
+        ui->menuBar->actions()[2]->setVisible(false);
         this->setWindowTitle("Осцилляторы");
         timer->stop();        
         uprend->start();
@@ -337,6 +351,7 @@ void MainWindow::on_startBut_clicked()
     {
         m->Init();
         time = 0;
+        stime = clock();
         lTime->setText("Время: 00:00:00");
         ui->startBut->setText("Остановить");
         timer->start();

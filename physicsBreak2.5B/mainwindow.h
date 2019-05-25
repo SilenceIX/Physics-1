@@ -73,8 +73,8 @@ private:
 
     const double PI = 2 * asin(1.);
     int mouse_x, mouse_y;
-    double alpha = 0.0, beta = 0.0;
-    int64_t time;
+    double alpha = 0.0, beta = 0.0, expand = 1.0;
+    clock_t time, stime;
     float radius = 5.0f;
     float angle = 0;
     float angle1 = 0;

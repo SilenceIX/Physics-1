@@ -11,29 +11,14 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Мы придумали построение графиков</string>
+   <string>Графики</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QCustomPlot" name="PlotSurface" native="true">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>800</width>
-      <height>450</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QWidget" name="widget" native="true">
-    <property name="geometry">
-     <rect>
-      <x>630</x>
-      <y>370</y>
-      <width>120</width>
-      <height>80</height>
-     </rect>
-    </property>
-   </widget>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QCustomPlot" name="PlotSurface" native="true"/>
+    </item>
+   </layout>
   </widget>
  </widget>
  <customwidgets>

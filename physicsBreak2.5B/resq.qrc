@@ -100,5 +100,7 @@
         <file>Stands/Math4/rope.obj</file>
         <file>Stands/Math4/rope.png</file>
         <file>Stands/Math7/rope.jpg</file>
+        <file>Stands/Math3/stick.obj</file>
+        <file>Stands/Math3/stpen.obj</file>
     </qresource>
 </RCC>

@@ -18,8 +18,8 @@ public:
         Active,
         Closed
     };
-
-    explicit Plot(std::function<double()>, std::function<double()>, QString, QWidget *p = nullptr);
+    double YPlotSize;
+    explicit Plot(std::function<double()>, std::function<double()>, QString, double,QWidget *p = nullptr);
 
     void resizeEvent(QResizeEvent *) override;
     void closeEvent(QCloseEvent *) override;

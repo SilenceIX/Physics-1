@@ -104,6 +104,7 @@ Model1::Model1()
     connect(p1, &QPushButton::clicked, [=]()
     {
         this->CreatePlot(0);
+        this->Update_plot(0.05,500);
     });
 
 
@@ -128,6 +129,17 @@ Model1::Model1()
 void Model1::Init()
 {
     t = 0.;
+}
+
+void Model1::Update_plot(double dt, int maxtime)
+{
+    t=0;
+    for (int i=0;i<maxtime;i++){
+    t+=dt;
+    Compute();
+    for (auto plot : plots)
+            plot->Update();
+    }
 }
 
 void Model1::Compute()
@@ -171,7 +183,7 @@ void Model1::CreatePlot(int plotID)
     {
         case 0:
             plot = new Plot([this]()->double{ return this->GetTime(); },
-                            [this]()->double{ return this->GetAngle(); }, "Угловое смещение, рад");
+                            [this]()->double{ return this->GetAngle(); }, "Угловое смещение, рад", abs(5.));
         break;
     }
 
