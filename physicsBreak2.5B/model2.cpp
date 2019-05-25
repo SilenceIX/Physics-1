@@ -27,12 +27,12 @@ Model2::Model2()
     inf->addWidget(i1);
 
     {
-        QLabel *k = new QLabel(QString("Длинна от вертикальной оси до диска: %1 м").arg(length));
+        QLabel *k = new QLabel(QString("Длина от вертикальной оси до диска: %1 м").arg(length));
         s1 = new QSlider(Qt::Horizontal); s1->setMinimum(15); s1->setMaximum(20); s1->setValue(int(length * 100.));
         connect(s1, &QSlider::valueChanged, [=]()
         {
         length = double(s1->value()) * 0.01;
-        k->setText(QString("Длинна от вертикальной оси до диска: %1 м").arg(length));
+        k->setText(QString("Длина от вертикальной оси до диска: %1 м").arg(length));
         SetTransform();
         });
         set->addWidget(k);
@@ -79,18 +79,18 @@ Model2::Model2()
         connect(s5, &QSlider::valueChanged, [=]()
         {
         phi_dot = double(s5->value()) * 0.1;
-        k->setText(QString("Начальня скорость прецессии диска: %1 рад/с").arg(phi_dot));
+        k->setText(QString("Угол наклона от вертикальной оси: %1 рад").arg(phi_dot));
         });
         set->addWidget(k);
         set->addWidget(s5);
     }
     {
-        QLabel *k = new QLabel(QString("Начальня скорость прецессии диска: %1 рад/с").arg(theta));
+        QLabel *k = new QLabel(QString("Начальная скорость прецессии диска: %1 рад/с").arg(theta));
         s6 = new QSlider(Qt::Horizontal); s6->setMinimum(785); s6->setMaximum(1570); s6->setValue(int(theta * 1000));
         connect(s6, &QSlider::valueChanged, [=]()
         {
         theta = double(s6->value()) * 0.001;
-        k->setText(QString("Начальня скорость прецессии диска: %1 рад/с").arg(theta));
+        k->setText(QString("Начальная скорость прецессии диска: %1 рад/с").arg(theta));
         });
         set->addWidget(k);
         set->addWidget(s6);

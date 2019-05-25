@@ -21,11 +21,9 @@ void Model6::LoadModel()
     addObject(ent, ":/Res/ceiling.obj", ":/Res/ceiling.jpg");
     addObject(ent, ":/Res/tablemetal.obj", ":/Res/tablemetal.png");
 
-    Qt3DCore::QEntity *p1 = addObject(ent, ":/Stands/Math6/gruz1o.obj", ":/Stands/Math6/tex1.png");
-    Qt3DCore::QEntity *p2 = addObject(ent, ":/Stands/Math6/gruz2o.obj", ":/Stands/Math6/tex1.png");
-    Qt3DCore::QEntity *p5 = addObject(ent, ":/Stands/Math6/stand2o.obj", ":/Stands/Math6/tex1.png");
-    Qt3DCore::QEntity *p6 = addObject(ent, ":/Stands/Math6/sterjeno.obj", ":/Stands/Math6/tex1.png");
-    Qt3DCore::QEntity *p7 = addObject(ent, ":/Stands/Math6/stand.obj", ":/Stands/Math6/tex2.png");
+    addObject(ent, ":/Stands/Math6/stand.obj", ":/Stands/Math6/stand.png");
+    Qt3DCore::QEntity *rod = addObject(ent, ":/Stands/Math6/rod.obj", ":/Stands/Math6/rod.png");
+    Qt3DCore::QEntity *load = addObject(ent, ":/Stands/Math6/load.obj", ":/Stands/Math6/load.png");
 
 
 

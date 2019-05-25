@@ -253,7 +253,7 @@ void MainWindow::on_pushButton_clicked()
         block = true;
 
         beta = PI / 6.;
-        alpha = 3 * PI / 2.;
+        alpha = PI;
         time = 0;
         lTime->setText("Время: 00:00:00");
 

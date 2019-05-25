@@ -137,15 +137,24 @@ Model1::Model1()
 void Model1::Init()
 {
     t = 0.;
+    A = A0 * exp(-beta * t);
     J = 2*(2*m*R*R/5 + m*r*r);
-    omega = sqrt(k/J);
+    omega0 = sqrt(k/J);
     beta = c/(4*sqrt(m*k)*J);
+    omega = sqrt(omega0*omega0 - beta*beta);
+    if (beta > omega0)
+    {
+        A = 0;
+        beta = 0;
+        omega = 0;
+        omega0 = 0;
+    }
 }
 
 void Model1::Update_plot(double dt, int maxtime)
 {
     double stime = t;
-    t=0;
+    Init();
     for (int i=0;i<maxtime;i++){
         for (int j=0;j<timesPrint;++j)
         {
@@ -160,7 +169,7 @@ void Model1::Update_plot(double dt, int maxtime)
 
 void Model1::Compute()
 {
-    angle = A0 * pow(e, -beta * t) * cos(omega * t);
+    angle = A * cos(omega * t);
 }
 
 void Model1::Transform()
@@ -189,7 +198,7 @@ void Model1::Update(double dt)
                 plot->Destroy();
                 plots.removeOne(plot);
             }
-    i1->setText(QString("Угол отклонения: %1 рад/c").arg(angle));
+    i1->setText(QString("Угол отклонения: %1 рад").arg(angle));
 }
 
 void Model1::CreatePlot(int plotID)
@@ -198,10 +207,22 @@ void Model1::CreatePlot(int plotID)
 
     switch (plotID)
     {
-        case 0:
-            plot = new Plot([this]()->double{ return this->GetTime(); },
-                            [this]()->double{ return this->GetAngle(); }, "Угловое смещение, рад", abs(5.));
-        break;
+    case 0:
+        plot = new Plot([this]()->double{ return this->GetTime(); },
+                        [this]()->double{ return this->GetAngle(); }, "Угловое отклонение, рад", abs(A));
+    break;
+    case 1:
+        plot = new Plot([this]()->double{ return this->GetTime(); },
+                        [this]()->double{ return this->GetEk(); }, "Кинетическая энергия, Дж", abs(GetEk() + GetEp()));
+    break;
+    case 2:
+        plot = new Plot([this]()->double{ return this->GetTime(); },
+                        [this]()->double{ return this->GetEp(); }, "Потенциальная энергия, Дж", abs(GetEk() + GetEp()));
+    break;
+    case 3:
+        plot = new Plot([this]()->double{ return this->GetTime(); },
+                        [this]()->double{ return this->GetEk() + this->GetEp(); }, "Полная энергия, Дж", abs(GetEk() + GetEp()));
+    break;
     }
 
     if (plot)

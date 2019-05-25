@@ -3,14 +3,16 @@
 
 void Model3::Transform()
 {
-    tr1->setRotation(QQuaternion::fromAxisAndAngle(QVector3D(0.0, 0.0, 1.0), float(A * toGrad)));
-    auto mat = tr2->rotateAround(QVector3D(0., 1.6f, 0.), float(A * toGrad), QVector3D(0.0, 0.0, 1.0));
-    mat.translate(0.f, float(-0.0665 * sL + 1.1676), 0.1f);
+    tr1->setRotation(QQuaternion::fromAxisAndAngle(QVector3D(1.0, 0.0, 0.0), float(A * toGrad)));
+    auto mat = tr2->rotateAround(QVector3D(0., 1.6f, 0.), float(A * toGrad), QVector3D(1.0, 0.0, 0.0));
+    mat.translate(0.f, float(-0.0665 * sL + 1.1676), 0.f);
     if (sr > 0.)
         mat.scale(float(0.2 * sr));
     tr2->setMatrix(mat);
     //tr2->setTranslation(QVector3D(0., float(0.6), 0.));
-    tr3->setRotation(QQuaternion::fromAxisAndAngle(QVector3D(0.0, 0.0, 1.0), float(A * toGrad)));
+    tr3->setRotation(QQuaternion::fromAxisAndAngle(QVector3D(1.0, 0.0, 0.0), float(A * toGrad)));
+    tr4->setRotationX(float(A * toGrad));
+    //tr4->setMatrix(tr4->rotateAround(QVector3D(0., 0.65f, 0.), float(A * toGrad), QVector3D(1.0, 0.0, 0.0)));
 }
 void Model3::LoadModel()
 {
@@ -28,15 +30,17 @@ void Model3::LoadModel()
     tr1 = new Qt3DCore::QTransform();
     tr2 = new Qt3DCore::QTransform();
     tr3 = new Qt3DCore::QTransform();
+    tr4 = new Qt3DCore::QTransform();
 
-    //tr2 = new Qt3DCore::QTransform();
 
     st->addComponent(tr1);
     ball->addComponent(tr2);
     stick->addComponent(tr3);
-    tr1->setTranslation(QVector3D(0.0, 1.6f, 0.1f));
-    tr2->setTranslation(QVector3D(0.0, 0.6f, 0.1f));
+    arr->addComponent(tr4);
+    tr1->setTranslation(QVector3D(0.0, 1.6f, 0.f));
+    tr2->setTranslation(QVector3D(0.0, 0.6f, 0.f));
     tr3->setTranslation(QVector3D(0.0, 1.6f, 0.0));
+    tr4->setTranslation(QVector3D(0.0, 0.653f, 0.0));
 }
 Model3::Model3()
 {
@@ -56,9 +60,9 @@ Model3::Model3()
     Transform();
 
 
-    QLabel *lGraf = new QLabel(QString("Количечетсво значений: %1").arg(500));
+    QLabel *lGraf = new QLabel(QString("Количетсво значений: %1").arg(500));
     sGraf = new QSlider(Qt::Horizontal); sGraf->setMinimum(50); sGraf->setMaximum(15000); sGraf->setValue(500);
-    cGraf = new QCheckBox("Моментально построение графиков");
+    cGraf = new QCheckBox("Моментальное построение графиков");
     connect(sGraf, &QSlider::valueChanged, [=](int d){
         lGraf->setText(QString("Количечетсво значений: %1").arg(d));
     });
@@ -216,9 +220,9 @@ void Model3::Update(double dt)
 }
 void Model3::Update_plot(double dt, int maxtime)
 {
-    time = 0;
     double sa = this->GetA();
     double sw = this->GetW();
+    Init();
     for (int i=0;i<maxtime;i++){
         for (int j=0;j<timesPrint;++j)
         {
@@ -309,7 +313,7 @@ void Model3::GetMenu(QMenu *m)
     a1->addAction(a1_3);
 
     QMenu *a2 = new QMenu("Графики системы", m);
-    QAction *a2_1 = new QAction("Угловое смещение", a2);
+    QAction *a2_1 = new QAction("Угловое отклонение", a2);
     QAction *a2_2 = new QAction("Угловая скорость", a2);
     QAction *a2_3 = new QAction("Угловое ускорение", a2);
 

@@ -38,7 +38,7 @@ public:
 class Model1 : public virtual Model, QObject
 {
 private:
-    double A0, beta, omega, angle, t, r, c, k, m, R, J;
+    double A0, beta, omega0,omega, angle, t, r, c, k, m, R, J, A;
     Qt3DCore::QEntity *ent;
     QVBoxLayout *set, *inf;
     QLabel *i1, *i2, *k1, *k2, *k3, *k4, *k5, *k6;
@@ -59,13 +59,15 @@ public:
     double GetOmega();
     double GetAngle();
     double GetTime();
+    double GetEp(){return 0.5*(k * pow(A*cos(omega0 * t),2.));}
+    double GetEk(){return 0.5*(J * pow(A * (-beta * cos(omega0 * t) - omega0 * sin(omega0 * t)), 2));}
     void GetMenu(QMenu *);
     Qt3DCore::QEntity *GetEntity();
     QVBoxLayout *GetSet();
     QVBoxLayout *GetInf();
     QString GetName() {return "Колебания торсионного маятника";}
     void lock(bool);
-    ~Model1(){}    
+    ~Model1(){}
     void Update_plot(double dt, int maxtime);
 };
 
@@ -131,7 +133,7 @@ private:
     QSlider *s1, *s2, *s3, *s4, *s5;
     QCheckBox *cGraf;
     QSlider *sGraf;
-    Qt3DCore::QTransform *tr1, *tr2, *tr3;
+    Qt3DCore::QTransform *tr1, *tr2, *tr3, *tr4;
     QList<Plot *> plots;
     double func(double axis, double speed);
 public:
