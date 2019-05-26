@@ -290,6 +290,12 @@ void Model3::CreatePlot(int plotID)
                         [this]()->double{ return this->GetEnergy(); }, "Угловое ускорение, рад/с^2",abs(YSize));
 
     break;
+    case 6:
+    YSize=this->L * 5;
+        plot = new Plot([this]()->double{ return sqrt(L / M); },
+                        [this]()->double{ return this->GetW(); }, "Угловая скорость, рад/c",abs(YSize));
+
+    break;
     }
 
 
@@ -305,7 +311,7 @@ void Model3::GetMenu(QMenu *m)
     QMenu *a1 = new QMenu("Графики энергии", m);
     QAction *a1_1 = new QAction("Потенциальная энергия", a1);
     QAction *a1_2 = new QAction("Кинетическая энергия", a1);
-    QAction *a1_3 = new QAction("Полня энергия", a1);
+    QAction *a1_3 = new QAction("Полная энергия", a1);
 
     m->addMenu(a1);
     a1->addAction(a1_1);
@@ -316,11 +322,13 @@ void Model3::GetMenu(QMenu *m)
     QAction *a2_1 = new QAction("Угловое отклонение", a2);
     QAction *a2_2 = new QAction("Угловая скорость", a2);
     QAction *a2_3 = new QAction("Угловое ускорение", a2);
+    QAction *a2_4 = new QAction("Отношение угловой скорости к квадрату длинны на массу", a2);
 
     m->addMenu(a2);
     a2->addAction(a2_1);
     a2->addAction(a2_2);
     a2->addAction(a2_3);
+   // a2->addAction(a2_4);
 
     connect(a1_1, &QAction::triggered, [=](){
         this->CreatePlot(2);
@@ -350,6 +358,11 @@ void Model3::GetMenu(QMenu *m)
     });
     connect(a2_3, &QAction::triggered, [=](){
         this->CreatePlot(5);
+        if (cGraf->checkState())
+            this->Update_plot(0.001,sGraf->value());
+    });
+    connect(a2_4, &QAction::triggered, [=](){
+        this->CreatePlot(6);
         if (cGraf->checkState())
             this->Update_plot(0.001,sGraf->value());
     });

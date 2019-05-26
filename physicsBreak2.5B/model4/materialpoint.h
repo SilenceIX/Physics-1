@@ -8,7 +8,7 @@ namespace physics {
 class MaterialPoint : public object
 {
     Q_OBJECT
-    Q_PROPERTY(float time READ getTime WRITE setTime)
+    Q_PROPERTY(float time READ getTime WRITE setTime NOTIFY timeChanged)
 private:
     static float time; // время, прошедшее с начал эксперимента
 public:
@@ -25,9 +25,9 @@ public:
     float     getTime() const;
     float     m() const;
     QVector3D r() const;
+
 signals:
-    void m_changed() const;
-    void r_changed() const;
+    void timeChanged() const;
 };
 
 }

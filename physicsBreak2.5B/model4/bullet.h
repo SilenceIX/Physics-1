@@ -9,7 +9,7 @@ class bullet : public MaterialPoint
 {
 private:
     float _k = 10.00f; // жёсткость пружины
-    float _b = 0.050f; // деформация пружины
+    float _b = 0.005f; // деформация пружины
 public:
     bullet(const float _m, Qt3DCore::QNode *parent = nullptr);
     void      move(const float t) override;
@@ -20,6 +20,9 @@ public:
     void set_b(const float __b);
     float b() const;
     float k() const;
+
+    //void bChanged();
+    //void kChanged();
 };
 }
 #endif // BULLET_H

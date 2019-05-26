@@ -71,7 +71,6 @@ public:
     void Update_plot(double dt, int maxtime);
 };
 
-
 class Model2 : public virtual Model, QObject
 {
 private:
@@ -169,15 +168,19 @@ private:
     QPropertyAnimation      *P        = nullptr;
     QPropertyAnimation      *M        = nullptr;
     QParallelAnimationGroup *group    = nullptr;
-    QVBoxLayout *box                  = nullptr;
+
+    QVBoxLayout *opt                  = nullptr;
+    QVBoxLayout *inf                  = nullptr;
     QSlider     *bullet_mass_slider   = nullptr;
     QSlider     *pendulum_mass_slider = nullptr;
     QSlider     *k_slider             = nullptr;
     QSlider     *b_slider             = nullptr;
-    QLabel      *bullet_mass_Label    = nullptr;
-    QLabel      *pendulum_mass_Label  = nullptr;
+    QLabel      *bullet_mass_label    = nullptr;
+    QLabel      *pendulum_mass_label  = nullptr;
     QLabel      *k_label              = nullptr;
     QLabel      *b_label              = nullptr;
+    QLabel      *move_label           = nullptr;
+    QLabel      *speed_label          = nullptr;
 
 public:
     Model4();
@@ -189,6 +192,9 @@ public:
     float get_b() const;
     float get_T() const;
     float get_omega() const;
+    float get_time()  const;
+    QVBoxLayout *get_opt() const;
+    QVBoxLayout *get_inf() const;
     physics::bullet   *get_bullet() const;
     physics::pendulum *get_pendulum() const;
     physics::measurer *get_measurer() const;
@@ -196,14 +202,14 @@ public:
     void Init();
     void Update(double){return;}
     Qt3DCore::QEntity *GetEntity() {return root;}
-    QVBoxLayout *GetSet(){return box;}
-    QVBoxLayout *GetInf(){return new QVBoxLayout();}
+
+    QVBoxLayout *GetSet(){return get_opt();}
+    QVBoxLayout *GetInf(){return get_inf();}
     void GetMenu(QMenu *) {return;}
     QString GetName(){return "Измерение скорости пули с помощью баллистического маятника";}
     ~Model4(){}
-    void lock(bool){}
+    void lock(bool);
 };
-
 
 class Model5 : public virtual Model, QObject
 {
@@ -213,17 +219,19 @@ private:
     void LoadModel();
     Qt3DCore::QEntity *ent;
     QVBoxLayout *set, *inf;
-    QLabel *i1, *k1;
-    QSlider *s1;
+    QLabel *i1;
+    QSlider *s1, *s2, *s3, *s4, *s5;
     Qt3DCore::QTransform *tr1, *tr2, *pruz;
     QList<Plot *> plots;
-
-    const int  k=100;               //коэффициент жесткости пружины, Н/м
-    const double l=0.5;             //длина нити, м
-    const double m=0.2;             //масса маятника (шара), кг
-    const double w1 =sqrt(g/l);     //1 собственная частота, 1/с^2
-    double d, st_angle1, st_angle2, t, angle1, angle2, Ep1, Ep2, Ek1, Ek2;
-    double D = 0.1, Start_angle1 = PI / 6, Start_angle2 = 0.0;
+    double  k;              //коэффициент жесткости пружины, Н/м
+    double l=0.5;             //длина нити, м
+    double m=0.2;             //масса маятника (шара), кг
+    double w1;     //1 собственная частота, 1/с^2
+    double Start_angle1, Start_angle2;
+    double D;
+    double w2;                      //2 собственная частота, 1/с^2
+    const double rad=M_PI/180.;     //перевод градусов в радианы
+    double d, t, angle1, angle2, W, Wm, E1, E2;
 public:
     Model5();
     void Init();
@@ -236,7 +244,13 @@ public:
     void GetMenu(QMenu *) {return;}
     QString GetName() {return "Колебания связанных физических маятников";}
     ~Model5(){}
+    void Func(double);
     double FuncW2();
+    double Get_Angle1();
+    double Get_Angle2();
+    void Get_W_Wm();
+    double Get_E1();
+    double Get_E2();
     void lock(bool){}
 };
 
@@ -269,7 +283,6 @@ public:
     ~Model6(){}
     void lock(bool){}
 };
-
 
 class Model7 : public virtual Model, QObject
 {

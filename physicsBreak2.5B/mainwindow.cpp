@@ -187,7 +187,7 @@ void MainWindow::Update()
         time += del;
         for (double k = 0; k < double(del); k += expand)
             m->Update(0.001);
-        lTime->setText(QString("Время: %1:%2:%3").arg(time / 1000 / 60, 2, 10,
+        lTime->setText(QString("Время: %1:%2.%3").arg(time / 1000 / 60, 2, 10,
                                                       QLatin1Char('0')).arg(time / 1000 % 60, 2, 10,
                                                                             QLatin1Char('0')).arg(time /10 % 100, 2, 10, QLatin1Char('0')));
     }
@@ -352,7 +352,7 @@ void MainWindow::on_startBut_clicked()
         m->Init();
         time = 0;
         stime = clock();
-        lTime->setText("Время: 00:00:00");
+        lTime->setText("Время: 00:00.00");
         m->lock(true);
         ui->startBut->setText("Остановить");
         timer->start();

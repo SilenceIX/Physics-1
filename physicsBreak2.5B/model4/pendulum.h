@@ -15,6 +15,8 @@ public:
     void      move(const float t) override;
     QVector3D pos (const float t) override;
     QVector3D v   (const float t) override;
+    float Ek(const float t);
+    float Ep(const float t);
 };
 
 }
