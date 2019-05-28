@@ -46,7 +46,9 @@ SOURCES += \
     model4.cpp \
     model5.cpp \
     model6.cpp \
-    model7.cpp
+    model7.cpp \
+    model4/plot4.cpp \
+    model8.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -59,12 +61,14 @@ HEADERS += \
     model4/physics.h \
     models.h \
     qcustomplot.h \
-    plot.h
+    plot.h \
+    model4/plot4.h
 
 FORMS += \
         mainwindow.ui \
     help.ui \
-    plot.ui
+    plot.ui \
+    plot4.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -160,14 +160,16 @@ public:
 class Model4 : public virtual Model, QObject
 {
 private:
-    Qt3DCore::QEntity       *root     = nullptr;
-    physics ::object        *lab      = nullptr;
-    physics ::bullet        *bullet   = nullptr;
-    physics ::pendulum      *pendulum = nullptr;
-    physics ::measurer      *measurer = nullptr;
-    QPropertyAnimation      *P        = nullptr;
-    QPropertyAnimation      *M        = nullptr;
-    QParallelAnimationGroup *group    = nullptr;
+    Qt3DCore::QEntity         *root     = nullptr;
+    physics ::object          *lab      = nullptr;
+    physics ::bullet          *bullet   = nullptr;
+    physics ::pendulum        *pendulum = nullptr;
+    physics ::measurer        *measurer = nullptr;
+    QPropertyAnimation        *B        = nullptr;
+    QPropertyAnimation        *P        = nullptr;
+    QPropertyAnimation        *M        = nullptr;
+    QParallelAnimationGroup   *swing    = nullptr;
+    QSequentialAnimationGroup *shoot    = nullptr;
 
     QVBoxLayout *opt                  = nullptr;
     QVBoxLayout *inf                  = nullptr;
@@ -198,6 +200,7 @@ public:
     physics::bullet   *get_bullet() const;
     physics::pendulum *get_pendulum() const;
     physics::measurer *get_measurer() const;
+    void CreatePlot(int) const;
 
     void Init();
     void Update(double){return;}
@@ -205,7 +208,7 @@ public:
 
     QVBoxLayout *GetSet(){return get_opt();}
     QVBoxLayout *GetInf(){return get_inf();}
-    void GetMenu(QMenu *) {return;}
+    void GetMenu(QMenu *);
     QString GetName(){return "Измерение скорости пули с помощью баллистического маятника";}
     ~Model4(){}
     void lock(bool);
@@ -219,10 +222,13 @@ private:
     void LoadModel();
     Qt3DCore::QEntity *ent;
     QVBoxLayout *set, *inf;
-    QLabel *i1;
+    QLabel *i1, *i2, *i3, *i4;
     QSlider *s1, *s2, *s3, *s4, *s5;
+    QCheckBox *cGraf;
+    QSlider *sGraf;
     Qt3DCore::QTransform *tr1, *tr2, *pruz;
     QList<Plot *> plots;
+    double YSize;
     double  k;              //коэффициент жесткости пружины, Н/м
     double l=0.5;             //длина нити, м
     double m=0.2;             //масса маятника (шара), кг
@@ -241,7 +247,7 @@ public:
     Qt3DCore::QEntity *GetEntity(){return ent; }
     QVBoxLayout *GetSet(){return set; }
     QVBoxLayout *GetInf() {return inf; }
-    void GetMenu(QMenu *) {return;}
+    void GetMenu(QMenu *);
     QString GetName() {return "Колебания связанных физических маятников";}
     ~Model5(){}
     void Func(double);
@@ -251,6 +257,7 @@ public:
     void Get_W_Wm();
     double Get_E1();
     double Get_E2();
+    void Update_plot(double dt, int maxtime);
     void lock(bool){}
 };
 
@@ -262,13 +269,15 @@ private:
     void LoadModel();
     Qt3DCore::QEntity *ent;
     QVBoxLayout *set, *inf;
-    QLabel *i1, *k1;
-    QSlider *s1;
-    Qt3DCore::QTransform *tr1;
+    QLabel *i1,*i2, *i3;
+    QSlider *s1, *s2, *s3, *s4, *s5;
+    Qt3DCore::QTransform *tr1, *tr2;
     QList<Plot *> plots;
 
+    double dtheta0, Theta0, m_st0, m_d0, l_st0, r1_0, r2_0;
 
-
+    double dtheta, Theta, m_st, m_d, m, l_st, r1, r2, d, I, C, Ist, Id1, Id2;
+    double K[4],L[4];
 public:
     Model6();
     void Init();
@@ -321,6 +330,33 @@ public:
     void lock(bool){}
 };
 
+class Model8 : public virtual Model, QObject
+{
+private:
+
+    void Transform();
+    void LoadModel();
+    Qt3DCore::QEntity *ent;
+    QVBoxLayout *set, *inf;
+    QLabel *i1;
+    Qt3DCore::QTransform *tr1;
+    QList<Plot *> plots;
+
+
+public:
+    Model8();
+    void Init();
+    void Compute(double);
+    void Update(double);
+    void CreatePlot(int);
+    Qt3DCore::QEntity *GetEntity(){return ent; }
+    QVBoxLayout *GetSet(){return set; }
+    QVBoxLayout *GetInf() {return inf; }
+    void GetMenu(QMenu *) {return;}
+    QString GetName() {return "Колебания электростатического маятника";}
+    ~Model8(){}
+    void lock(bool){}
+};
 
 
 

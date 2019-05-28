@@ -20,9 +20,6 @@ public:
     void set_b(const float __b);
     float b() const;
     float k() const;
-
-    //void bChanged();
-    //void kChanged();
 };
 }
 #endif // BULLET_H

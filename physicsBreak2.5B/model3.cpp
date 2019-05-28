@@ -244,9 +244,10 @@ void Model3::lock(bool b)
 
 void Model3::CreatePlot(int plotID)
 {
-    this->Init();
     Plot *plot = nullptr;
-
+    double sa = this->GetA();
+    double sw = this->GetW();
+    Init();
     switch (plotID)
     {
         case 0:{
@@ -297,8 +298,8 @@ void Model3::CreatePlot(int plotID)
 
     break;
     }
-
-
+    A = sa;
+    W = sw;
     if (plot)
     {
         plot->show();

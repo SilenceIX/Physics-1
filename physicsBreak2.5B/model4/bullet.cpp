@@ -12,7 +12,7 @@ void physics::bullet::move(const float t)
 
 QVector3D physics::bullet::pos(const float t)
 {
-    return r() + v(0) * t;
+    return v(0) * t + r();
 }
 
 QVector3D physics::bullet::v(const float t)
