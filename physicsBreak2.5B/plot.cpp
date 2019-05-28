@@ -25,6 +25,7 @@ Plot::Plot(std::function<double()> getarg, std::function<double()> getvalue, QSt
         plot->yAxis->setRange(-ysize*2.0, ysize*2.0);
     else plot->yAxis->setRange(-1,1);
     plot->setInteractions(QCP::iRangeDrag|QCP::iRangeZoom);
+    plot->setAttribute(Qt::WidgetAttribute::WA_DeleteOnClose);
 }
 
 void Plot::resizeEvent(QResizeEvent *re)

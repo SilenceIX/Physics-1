@@ -34,7 +34,6 @@ public:
     virtual ~Model() = default;
 };
 
-
 class Model1 : public virtual Model, QObject
 {
 private:
@@ -223,7 +222,7 @@ private:
     Qt3DCore::QEntity *ent;
     QVBoxLayout *set, *inf;
     QLabel *i1, *i2, *i3, *i4;
-    QSlider *s1, *s2, *s3, *s4, *s5;
+    QSlider *s1, *s2, *s3, *s4, *s5, *s6;
     QCheckBox *cGraf;
     QSlider *sGraf;
     Qt3DCore::QTransform *tr1, *tr2, *pruz;
@@ -231,7 +230,7 @@ private:
     double YSize;
     double  k;              //коэффициент жесткости пружины, Н/м
     double l=0.5;             //длина нити, м
-    double m=0.2;             //масса маятника (шара), кг
+    double m, M;             //масса маятника (шара), кг
     double w1;     //1 собственная частота, 1/с^2
     double Start_angle1, Start_angle2;
     double D;

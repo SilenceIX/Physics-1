@@ -93,7 +93,7 @@ Model3::Model3()
     k4 = new QLabel(QString("Начальный угол отклонения: %1 рад").arg(sA));
     k5 = new QLabel(QString("Начальная скорость маятника: %1 рад/c").arg(sW));
 
-    s1 = new QSlider(Qt::Horizontal); s1->setMinimum(1); s1->setMaximum(10000); s1->setValue(int(sM * 100.));
+    s1 = new QSlider(Qt::Horizontal); s1->setMinimum(1); s1->setMaximum(5000); s1->setValue(int(sM * 100.));
     connect(s1, &QSlider::valueChanged, [=]()
     {
         this->sM = double(s1->value()) / 100.;
@@ -141,7 +141,7 @@ Model3::Model3()
     set->addWidget(k5);
     set->addWidget(s5);
 
-    QCheckBox *ch = new QCheckBox("Учитывать лобовое сопротивление воздуха");
+    QCheckBox *ch = new QCheckBox("Учитывать сопротивление воздуха");
     ch->setCheckState(Qt::Checked);
     connect(ch, &QCheckBox::stateChanged, [=](int k){
         if (k == 0)

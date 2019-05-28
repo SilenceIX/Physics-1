@@ -12,8 +12,9 @@ Model5::Model5()
     E2 = 0.;
     Start_angle1 = 0.;
     Start_angle2 = 0.;
-    D = 4.5;
-    d = 4.5;
+    M = 0.1;
+    D = 0.5;
+    d = D;
     k = 1.;
 
     LoadModel();
@@ -73,9 +74,21 @@ Model5::Model5()
     }
 
     {
+        QLabel *km = new QLabel(QString("Масса одного маятника: %1 кг").arg(M));
+        s6 = new QSlider(Qt::Horizontal); s6->setMinimum(100); s6->setMaximum(5000); s6->setValue(int(M * 1000.));
+        connect(s6, &QSlider::valueChanged, [=]()
+        {
+        M = double(s6->value()) / 1000.;
+        km->setText(QString("Масса одного маятника: %1 кг").arg(M));
+        });
+        set->addWidget(km);
+        set->addWidget(s6);
+    }
+
+    {
         QLabel *km = new QLabel(QString("Расстояние положения пружины от точек подвеса маятников: %1 м").arg(D));
         km->setWordWrap(true);
-        s3 = new QSlider(Qt::Horizontal); s3->setMinimum(100); s3->setMaximum(4500); s3->setValue(int(D * 1000));
+        s3 = new QSlider(Qt::Horizontal); s3->setMinimum(100); s3->setMaximum(1000); s3->setValue(int(D * 1000));
         connect(s3, &QSlider::valueChanged, [=]()
         {
         D = double(s3->value()) / 1000;
@@ -110,11 +123,11 @@ void Model5::Transform()
     tr2->setRotation(QQuaternion::fromAxisAndAngle(QVector3D(1.0, 0.0, 0.0), float(angle2 * toGrad)));
 
     double x1, x2;
-    x1 = -0.22 - sin(angle1) * (0.54 - 0.3 * (4.5 - d) / 4.4);
-    x2 = 0.22 - sin(angle2) * (0.54 - 0.3 * (4.5 - d) / 4.4);
+    x1 = -0.22 - sin(angle1) * (0.54 - 0.3 * (1. - d) / 0.9);
+    x2 = 0.22 - sin(angle2) * (0.54 - 0.3 * (1. - d) / 0.9);
     double m = (x1 + x2) / 2.;
     pruz->setScale3D(QVector3D(1.f, 1.f, float((x2 - x1) / 0.44)));
-    pruz->setTranslation(QVector3D(-0.09f, float(0.54 + 0.3 * (4.5 - d) / 4.4), float(m)));
+    pruz->setTranslation(QVector3D(-0.09f, float(0.54 + 0.3 * (1. - d) / 0.9), float(m)));
     //pruz->setScale3D(QVector3D())
 }
 
@@ -150,6 +163,7 @@ void Model5::LoadModel()
 void Model5::Init()
 {
     d = D;
+    m = M;
     w1 = sqrt(g/l);
     t =  0;
 }
@@ -167,7 +181,7 @@ double Model5::FuncW2()
     return w2;
 }
 
-void Model5::Func(double dt)
+void Model5::Func(double)
 {
     w2 = FuncW2();
     double F1 = (Start_angle1 + Start_angle2)*cos(w1*t);
